@@ -124,9 +124,26 @@ function getClinicTypeCode() {
     return $clinicTypeList;
 }
 
+function getOptionType() {
+    $optionTypeList = array();
+    $sql = "SELECT type_id,type_desc"
+            . " FROM tbl_options";
+    $params = array(
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $optionType = new OptionType();
+        $optionType->type_id = $record['type_id'];
+        $optionType->type_desc = $record['type_desc'];
+        $optionTypeList[] = $optionType;
+    }
+    return $optionTypeList;
+}
+
+
 
 function mflCodeSend($ussdUser) {
-    $sql = "INSERT INTO ussd_users (msisdn,facilityName)"
+    $sql = "INSERT INTO tbl_facility (msisdn,mflCode)"
             . " VALUES(:msisdn,:mflCode)";
     $params = array(
         ':msisdn' => $ussdUser->msisdn,
@@ -135,7 +152,7 @@ function mflCodeSend($ussdUser) {
     return _execute($sql, $params);
 }
 function facilityNameSearch($ussdUser) {
-    $sql = "INSERT INTO ussd_users (msisdn,facilityName)"
+    $sql = "INSERT INTO tbl_facility (msisdn,facilityName)"
             . " VALUES(:msisdn,:facilityName)";
     $params = array(
         ':msisdn' => $ussdUser->msisdn,
@@ -145,15 +162,16 @@ function facilityNameSearch($ussdUser) {
 }
 
 function updateFacility($ussdUser) {
-    $sql = "UPDATE INTO ussd_users (msisdn,clinicalType,phoneNumber)"
-            . " VALUES(:msisdn,:facilityName,:phoneNumber)";
-    $params = array(
-        ':msisdn' => $ussdUser->msisdn,
-        ':facilityName' => $ussdUser->facilityName,
-        ':phoneNumber' => $ussdUser->phoneNumber,
-    );
-    return _execute($sql, $params);
+        $sql = "UPDATE tbl_facility SET clinicalType=:clinicalType,phoneNumber=:phoneNumber
+        WHERE msisdn=:msisdn";
+        $params = array(
+            ':clinicalType' => $ussdUser->clinicalType,
+            ':phoneNumber' => $ussdUser->phoneNumber,
+            ':msisdn' => $ussdUser->msisdn,
+        );
+        return _execute($sql, $params);
 }
+
 
 function getUssdUserList($msisdn) {
     $ussdUserList = array();
@@ -177,6 +195,8 @@ function getUssdUserList($msisdn) {
     return $ussdUserList;
 }
 
+
+
 function createUssdUser($ussdUser) {
     $sql = "INSERT INTO ussd_users (msisdn,firstName,lastName,idNumber)"
             . " VALUES(:msisdn,:firstName,:lastName,:idNumber)";
@@ -185,6 +205,52 @@ function createUssdUser($ussdUser) {
         ':firstName' => $ussdUser->firstName,
         ':lastName' => $ussdUser->lastName,
         ':idNumber' => $ussdUser->idNumber,
+    );
+    return _execute($sql, $params);
+}
+
+
+function saveAcceptRef($ussdUser) {
+    $sql = "INSERT INTO tbl_facility (cccNumber,optionType)"
+            . " VALUES(:cccNumber,:optionType)";
+    $params = array(
+        ':cccNumber' => $ussdUser->cccNumber,
+        ':optionType' => $ussdUser->optionType,
+
+    );
+    return _execute($sql, $params);
+}
+function secretPin($ussdUser) {
+    $sql = "INSERT INTO tbl_facility (cccNumber,pin)"
+            . " VALUES(:cccNumber,:pin)";
+    $params = array(
+        ':cccNumber' => $ussdUser->cccNumber,
+        ':pin' => $ussdUser->pin,
+
+    );
+    return _execute($sql, $params);
+}
+
+function transit($ussdUser) {
+    $sql = "INSERT INTO tbl_facility (cccNumber,numberOfDrugs)"
+            . " VALUES(:cccNumber,:numberOfDrugs)";
+    $params = array(
+        ':cccNumber' => $ussdUser->cccNumber,
+        ':numberOfDrugs' => $ussdUser->numberOfDrugs,
+
+    );
+    return _execute($sql, $params);
+}
+
+
+function initialReference($ussdUser) {
+    $sql = "INSERT INTO tbl_facility (cccNumber,mflCode,daysOfAppointment,currentRegime)"
+            . " VALUES(:cccNumber,:mflCode,:daysOfAppointment,:currentRegime)";
+    $params = array(
+        ':cccNumber' => $ussdUser->cccNumber,
+        ':mflCode' => $ussdUser->mflCode,
+        ':daysOfAppointment' => $ussdUser->daysOfAppointment,
+        ':currentRegime' => $ussdUser->currentRegime,
     );
     return _execute($sql, $params);
 }

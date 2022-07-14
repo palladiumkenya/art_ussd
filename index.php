@@ -4,9 +4,18 @@ define("LOG_FILE", "error.log");
 
 $_GET = $_REQUEST;
 $sessionId = isset($_GET['sessionId']) ? $_GET['sessionId'] : '';
-$msisdn = isset($_GET['phoneNumber']) ? $_GET['MSISDN'] : '';
+$msisdn = isset($_GET['msisdn']) ? $_GET['msisdn'] : '';
 $serviceCode = isset($_GET['serviceCode']) ? $_GET['serviceCode'] : '';
 $ussdString = isset($_GET['text']) ? $_GET['text'] : '';
+
+
+// date_default_timezone_set('Africa/Nairobi');
+// define("LOG_FILE", "error.log");
+// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($_REQUEST, true), 3, LOG_FILE);
+// $sessionId = isset($_REQUEST['sessionId']) ? $_REQUEST['sessionId'] : '';
+// $msisdn = isset($_REQUEST['phoneNumber']) ? $_REQUEST['phoneNumber'] : '';
+// $serviceCode = isset($_REQUEST['serviceCode']) ? $_REQUEST['serviceCode'] : '';
+// $ussdString = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 
 
 include_once("Models.php");
@@ -67,7 +76,11 @@ if ($ussdString == "") {
                     $reply = "CON INVALID INPUT. Only number 1-2 allowed.\n" . $ussdSession->currentFeedbackString;
                     $ussdSession->currentFeedbackString = $reply;
                 }
-            } elseif (MenuItems::FACILITY_DIRECTORY_REQ == $ussdSession->previousFeedbackTypee) {
+            } elseif (MenuItems::FACILITY_DIRECTORY_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::FACILITY_NAME_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::CLINIC_TYPE_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::PHONE_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType ) {
                 $facilityDirectory = new FacilityDirectoryAction();
                 $ussdSession = $facilityDirectory->process($ussdSession);
             } else {

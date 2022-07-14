@@ -88,10 +88,10 @@ class FacilityDirectoryAction {
                 return $ussdSession;           
     }
     function mflCodeSearch($ussdSession){
-        $ussdUser = new UssdUser();
-        $ussdUser->msisdn = $ussdSession->msisdn;
-        $ussdUser->mflCode = UssdSession::getUserParam(UssdSession::MFL_CODE_ID, $ussdSession->userParams);
-        if(mflCodeSend($ussdUser)){
+        $ussdMfl = new UssdFacility();
+        $ussdMfl->msisdn = $ussdSession->msisdn;
+        $ussdMfl->mflCode = UssdSession::getUserParam(UssdSession::MFL_CODE_ID, $ussdSession->userParams);
+        if(mflCodeSend($ussdMfl)){
             return "You have send MFL Code successfully!";  
         } else {
             return "There was an error in your request. Please try again.";           
@@ -99,11 +99,11 @@ class FacilityDirectoryAction {
     }
 
     function updateFacility($ussdSession){
-        $ussdUser = new UssdUser();
-        $ussdUser->msisdn = $ussdSession->msisdn;
-        $ussdUser->clinicalType = UssdSession::getUserParam(UssdSession::CLINIC_TYPE_ID, $ussdSession->userParams);
-        $ussdUser->phoneNumber = UssdSession::getUserParam(UssdSession::PHONE_NUMBER_ID, $ussdSession->userParams);
-        if(updateFacility($ussdUser)){
+        $ussdFacility = new UssdFacility();
+        $ussdFacility->msisdn = $ussdSession->msisdn;
+        $ussdFacility->clinicalType = UssdSession::getUserParam(UssdSession::CLINIC_TYPE_ID, $ussdSession->userParams);
+        $ussdFacility->phoneNumber = UssdSession::getUserParam(UssdSession::PHONE_NUMBER_ID, $ussdSession->userParams);
+        if(updateFacility($ussdFacility)){
             return "You have updated Facility successfully!";  
         } else {
             return "There was an error in your request. Please try again.";           
@@ -111,10 +111,10 @@ class FacilityDirectoryAction {
     }
 
     function facilityNameSearch($ussdSession){
-        $ussdUser = new UssdUser();
-        $ussdUser->msisdn = $ussdSession->msisdn;
-        $ussdUser->facilityName = UssdSession::getUserParam(UssdSession::FACILITY_NAME_ID, $ussdSession->userParams);
-        if(facilityNameSend($ussdUser)){
+        $ussdFacility = new UssdFacility();
+        $ussdFacility->msisdn = $ussdSession->msisdn;
+        $ussdFacility->facilityName = UssdSession::getUserParam(UssdSession::FACILITY_NAME_ID, $ussdSession->userParams);
+        if(facilityNameSearch($ussdFacility)){
             return "You have send facility Name successfully!";  
         } else {
             return "There was an error in your request. Please try again.";           

@@ -88,11 +88,19 @@ function isValidPhone($phone) {
     }
 }
 function isValidPIN($pin) {
-    if (strlen($pin) < 4) {
+    if (is_numeric($pin) < 4) {
         return false;
     } else {
         return true;
     }
+}
+
+function isOptions($options) {
+    if (in_array($options, array("Acept", "Decline"))) {
+            return true;
+        } else {
+            return false;
+        }
 }
 
 function isValidIdMFLCode($mflCode) {

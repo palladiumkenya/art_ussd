@@ -19,6 +19,8 @@ class MenuItems {
 	const CLINIC_TYPE_REQ = "CLINIC_TYPE_REQ";
 	const PHONE_NUMBER_REQ = "PHONE_NUMBER_REQ";
 	const MFL_CODE_REQ = "MFL_CODE_REQ";
+    const INIT_MFL_CODE_REQ = "INIT_MFL_CODE_REQ";
+
 	const FACILITY_NAME_REQ = "FACILITY_NAME_REQ";
 	const INITIATE_REFERRAL_REQ = "INITIATE_REFERRAL_REQ";
 	const APPOINTMENT_DATE_REQ = "APPOINTMENT_DATE_REQ";
@@ -90,11 +92,11 @@ class MenuItems {
         if (count($clinicTypeList) > 0) {
             $displayedClinicTypeList = "";
             for ($i = 1; $i <= count($clinicTypeList); $i++) {
-                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->name;
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
                 if ($i != count($clinicTypeList)) {
-                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->id . "#";
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
                 } else {
-                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->id;
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
                 }
             }
             $userParams = $ussdSession->userParams . UssdSession::CLINIC_TYPE_ID . "=" . $displayedClinicTypeList . "*";
@@ -106,8 +108,6 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::CLINIC_TYPE_REQ;
         return $ussdSession;
     } 
-
-
     public function setPhoneNumberRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Phone Number:";
         $ussdSession->currentFeedbackType = self::PHONE_NUMBER_REQ;
@@ -146,17 +146,39 @@ class MenuItems {
         return $ussdSession;
     }
 
-    public function setMoreOptionsRequest($ussdSession) {
-
-        $menuArray = array("Accept", "Decline");
-        $ussdSession->currentFeedbackString = "Select Option:\n" . generateMenu($menuArray);
+ 
+        public function setMoreOptionsRequest($ussdSession) {
+        $clinicTypeList = getOptionType();
+        $reply = "Select Options:";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
+                }
+            }
+            $userParams = $ussdSession->userParams . UssdSession::MORE_OPTIONS_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply = "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
         $ussdSession->currentFeedbackType = self::MORE_OPTIONS_REQ;
         return $ussdSession;
-    }
+    } 
 
     public function setFacilityMFLCodeRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Facility MFL Code:";
         $ussdSession->currentFeedbackType = self::MFL_CODE_REQ;
+        return $ussdSession;
+    }
+
+        public function setFacilityInitMFLCodeRequest($ussdSession) {
+        $ussdSession->currentFeedbackString = "Enter Facility MFL Code:";
+        $ussdSession->currentFeedbackType = self::INIT_MFL_CODE_REQ;
         return $ussdSession;
     }
     public function setAppoinmentDateRequest($ussdSession) {
@@ -170,10 +192,17 @@ class MenuItems {
         return $ussdSession;
     }
     public function setSecretPinRequest($ussdSession) {
-        $ussdSession->currentFeedbackString = "Enter Secret Pin:";
+        $FourDigitRandomNumber = rand(0001,9999);
+        $secretPin = UssdSession::getUserParam(UssdSession::SECRET_PIN_ID, $ussdSession->userParams);
+       // if( $FourDigitRandomNumber == $secretPin){
+            $ussdSession->currentFeedbackString = "Enter this Secret pin: ". $FourDigitRandomNumber;
+       // }
         $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
         return $ussdSession;
     }
+
+
+
     public function setNumberOfDaysRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Number of Days:";
         $ussdSession->currentFeedbackType = self::NUMBER_OF_DAYS_REQ;

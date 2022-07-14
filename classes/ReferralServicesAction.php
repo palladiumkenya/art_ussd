@@ -21,10 +21,10 @@ class ReferralServicesAction {
                     }elseif("2"== $lastSelection){//Accept Referrals
                         $ussdSession = $menuItems->setAcceptReferralRequest($ussdSession);    
                         $reply = "CON " . $ussdSession->currentFeedbackString . $menuSuffix;
-                    }elseif("3"== $lastSelection){//Get Patient Details
+                    }elseif("3"== $lastSelection){//Get Patient Details  
                         $ussdSession = $menuItems->setPatientDetailsRequest($ussdSession);    
                         $reply = "CON " . $ussdSession->currentFeedbackString . $menuSuffix;  
-                     }elseif("4"== $lastSelection){//Transit Clients
+                     }elseif("4"== $lastSelection){//Transit Clients  
                         $ussdSession = $menuItems->setTransitClientRequest($ussdSession);    
                         $reply = "CON " . $ussdSession->currentFeedbackString . $menuSuffix;                     
                     }else{
@@ -43,21 +43,21 @@ class ReferralServicesAction {
                 if (isValidIdCCCNumber($cccNumber)) {
                     $userParams = UssdSession::INITIAL_REF_CCC_NUMBER_ID . "=" . $cccNumber . "*";
                     $ussdSession->userParams = $userParams;
-                    $ussdSession = $menuItems->setFacilityMFLCodeRequest($ussdSession);
+                    $ussdSession = $menuItems->setFacilityInitMFLCodeRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
                     $ussdSession = $menuItems->setInitialReferralRequest($ussdSession);
                         $reply = "CON The name you entered contains NUMBERS or INVALID characters.\n" . $ussdSession->currentFeedbackString;
                 }
-            } elseif (MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType) {
+            } elseif (MenuItems::INIT_MFL_CODE_REQ == $ussdSession->previousFeedbackType) {
                 $mflCode = trim($params[count($params) - 1]);
                 if (isValidIdMFLCode($mflCode)) {
-                    $userParams = $ussdSession->userParams . UssdSession::MFL_CODE_ID . "=" . $mflCode . "*";
+                    $userParams = $ussdSession->userParams . UssdSession::INIT_MFL_CODE_ID . "=" . $mflCode . "*";
                     $ussdSession->userParams = $userParams;
                     $ussdSession = $menuItems->setAppoinmentDateRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
-                    $ussdSession = $menuItems->setFacilityMFLCodeRequest($ussdSession);
+                    $ussdSession = $menuItems->setFacilityInitMFLCodeRequest($ussdSession);
                         $reply = "CON The name you entered contains NUMBERS or INVALID characters.\n" . $ussdSession->currentFeedbackString;
                 }
             } elseif (MenuItems::APPOINTMENT_DATE_REQ == $ussdSession->previousFeedbackType) {
@@ -83,10 +83,29 @@ class ReferralServicesAction {
                         $reply = "CON The Phone Number you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
                 } 
 
-            /////// Second option    
-     
-
-
+         //    /////// Second option    
+         } elseif (MenuItems::ACCEPT_REF_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
+                $cccNumber = trim($params[count($params) - 1]);
+                if (isValidIdCCCNumber($cccNumber)) {
+                    $userParams = UssdSession::ACCEPT_REF_CCC_NUMBER_ID . "=" . $cccNumber . "*";
+                    $ussdSession->userParams = $userParams;
+                    $ussdSession = $menuItems->setMoreOptionsRequest($ussdSession);
+                    $reply = "CON " . $ussdSession->currentFeedbackString;
+                } else {
+                    $ussdSession = $menuItems->setAcceptReferralRequest($ussdSession);
+                        $reply = "CON The name you entered contains NUMBERS or INVALID characters.\n" . $ussdSession->currentFeedbackString;
+                }
+            } elseif (MenuItems::MORE_OPTIONS_REQ == $ussdSession->previousFeedbackType) {
+                $displayedClinicCodesArray = explode("#", UssdSession::getUserParam(UssdSession::MORE_OPTIONS_ID, $ussdSession->userParams));
+                $clinicalTypeSize = count($displayedClinicCodesArray);
+                if (is_numeric($lastSelection) && $lastSelection > 0 && $lastSelection <= $clinicalTypeSize) {
+                    $userParams = $ussdSession->userParams . UssdSession::MORE_OPTIONS_ID . "=" . $clinicalTypeSize . "*";
+                    $ussdSession->userParams = $userParams;
+                    $reply = "END " . self::saveAcceptRef($ussdSession);
+                } else {
+                    $ussdSession = $menuItems->setMoreOptionsRequest($ussdSession);
+                    $reply = "CON INVALID INPUT. Select from 1-" . $clinicalTypeSize . ".\n" . $ussdSession->currentFeedbackString;
+                }
 
      ///// Third Option
            } elseif (MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
@@ -122,7 +141,7 @@ class ReferralServicesAction {
                     $ussdSession = $menuItems->setNumberOfDaysRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
-                    $ussdSession = $menuItems->setPatientDetailsRequest($ussdSession);
+                    $ussdSession = $menuItems->setTransitClientRequest($ussdSession);
                         $reply = "CON The name you entered contains NUMBERS or INVALID characters.\n" . $ussdSession->currentFeedbackString;
                 }
             } elseif (MenuItems::NUMBER_OF_DAYS_REQ == $ussdSession->previousFeedbackType) {
@@ -130,9 +149,9 @@ class ReferralServicesAction {
                  if (isValidNumberOfdays($numberOfDays)) {
                     $userParams = $ussdSession->userParams . UssdSession::NUMBER_OF_DAYS_ID . "=" . $numberOfDays . "*";
                     $ussdSession->userParams = $userParams;
-                    $reply = "END " . self::numberOfDays($ussdSession);
+                    $reply = "END " . self::transit($ussdSession);
                 } else {
-                    $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
+                    $ussdSession = $menuItems->setNumberOfDaysRequest($ussdSession);
                         $reply = "CON The Number you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
                 } 
 
@@ -144,27 +163,55 @@ class ReferralServicesAction {
                 return $ussdSession;           
     }
 
-   public function secretPin($ussdSession)
-   {
-      
-   }
 
-      public function numberOfDays($ussdSession)
-   {
-      
-   }
+
+ 
 
     function initialReference($ussdSession){
-        $ussdUser = new UssdUser();
+        $ussdUser = new UssdFacility();
         $ussdUser->msisdn = $ussdSession->msisdn;
-        $ussdUser->mflCode = UssdSession::getUserParam(UssdSession::MFL_CODE_ID, $ussdSession->userParams);
-        if(mflCodeSend($ussdUser)){
-            return "You have send MFL Code successfully!";  
+        $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::INITIAL_REF_CCC_NUMBER_ID, $ussdSession->userParams);
+        $ussdUser->mflCode = UssdSession::getUserParam(UssdSession::INIT_MFL_CODE_ID, $ussdSession->userParams);
+        $ussdUser->daysOfAppointment = UssdSession::getUserParam(UssdSession::APPOINTMENT_DATE_ID, $ussdSession->userParams);
+        $ussdUser->currentRegime = UssdSession::getUserParam(UssdSession::CURRENT_REGIMEN_ID, $ussdSession->userParams);
+        if(initialReference($ussdUser)){
+            return "You have send Initial Referral send successfully!";  
         } else {
             return "There was an error in your request. Please try again.";           
         }
     }
 
+    function secretPin($ussdSession){
+        $ussdUser = new UssdFacility();
+        $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::PATIENT_DETAILS_CCC_NUMBER_ID, $ussdSession->userParams);
+        $ussdUser->pin = UssdSession::getUserParam(UssdSession::SECRET_PIN_ID, $ussdSession->userParams);
+        if(secretPin($ussdUser)){
+            return "You have send a request successfully!";  
+        } else {
+            return "There was an error in your request. Please try again.";           
+        }
+    }
 
+    function transit($ussdSession){
+        $ussdUser = new UssdFacility();
+        $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::TRANSIT_CLIENT_CCC_NUMBER_ID, $ussdSession->userParams);
+        $ussdUser->numberOfDrugs = UssdSession::getUserParam(UssdSession::NUMBER_OF_DAYS_ID, $ussdSession->userParams);
+        if(secretPin($ussdUser)){
+            return "You have send a request successfully!";  
+        } else {
+            return "There was an error in your request. Please try again.";           
+        }
+    }
+
+    function saveAcceptRef($ussdSession){
+        $ussdUser = new UssdFacility();
+        $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::ACCEPT_REF_CCC_NUMBER_ID, $ussdSession->userParams);
+        $ussdUser->optionType = UssdSession::getUserParam(UssdSession::MORE_OPTIONS_ID, $ussdSession->userParams);
+        if(secretPin($ussdUser)){
+            return "You have send a request successfully!";  
+        } else {
+            return "There was an error in your request. Please try again.";           
+        }
+    }
   
 }

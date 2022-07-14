@@ -37,6 +37,8 @@ class UssdSession {
     const CLINIC_TYPE_ID = "CLINIC_TYPE_ID";
     const PHONE_NUMBER_ID = "PHONE_NUMBER_ID";
     const MFL_CODE_ID = "MFL_CODE_ID";
+    const INIT_MFL_CODE_ID = "INIT_MFL_CODE_ID";
+
     const FACILITY_NAME_ID = "FACILITY_NAME_ID";
     const INITIATE_REFERRAL_ID = "INITIATE_REFERRAL_ID";
     const APPOINTMENT_DATE_ID = "APPOINTMENT_DATE_ID";
@@ -51,6 +53,7 @@ class UssdSession {
     const FIRSTNAME = "FIRSTNAME";
     const LASTNAME ="LASTNAME";
     const IDNUMBER = "IDNUMBER";
+
  
     
     public static function getUserParam($paramName, $userParams) {
@@ -69,6 +72,10 @@ class UssdSession {
         var $type_id;
         var $type_desc;
     }
+        class OptionType {
+        var $type_id;
+        var $type_desc;
+    }
 
     class UssdUser {
     var $id;
@@ -79,3 +86,20 @@ class UssdSession {
     var $dateCreated;
 
 }
+
+    class UssdFacility {
+    var $id;
+    var $msisdn;
+    var $facilityName;
+    var $phoneNumber;
+    var $mflCode;
+    var $dateCreated;
+    var $daysOfAppointment;
+    var $currentRegime;
+    var $pin;
+    var $numberOfDrugs;
+    var $optionType;
+    var $cccNumber;
+
+}
+
