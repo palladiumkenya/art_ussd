@@ -25,6 +25,7 @@ include_once ("./classes/MyAccountAction.php");
 include_once ("./classes/FacilityDirectoryAction.php");
 include_once ("./classes/ReferralServicesAction.php");
 include_once ("./classes/UssdUtils.php");
+include_once ("./classes/GenerateSecretPin.php");
 
 if ($ussdString == "") {
     $ussdSession = new UssdSession();
@@ -46,14 +47,11 @@ if ($ussdString == "") {
         $ussdSession->ussdProcessString = $ussdString;
         $ussdSession->previousFeedbackType = $ussdSession->currentFeedbackType;
 
-        // if (MenuItems::AUTHORISATION_REQ == $ussdSession->previousFeedbackType) {
-        //     $authorisation = new AuthorisationAction();
-        //     $ussdSession = $authorisation->process($ussdSession);
-        if (MenuItems::FIRSTNAME_REQ == $ussdSession->previousFeedbackType ||
-            MenuItems::LASTNAME_REQ == $ussdSession->previousFeedbackType ||
-            MenuItems::ID_NUMBER_REQ == $ussdSession->previousFeedbackType) {
-            $registration = new RegistrationAction();
-            $ussdSession = $registration->process($ussdSession);
+        if (MenuItems::AUTHORISATION_REQ == $ussdSession->previousFeedbackType) {
+              $ussdSession = new UssdSession();
+              $reply = "END Your are not Registered to this USSD Platform..";
+              $ussdSession->currentFeedbackString = $reply;
+    
         } else {
             $menuItems = new MenuItems();
 //            $menuSuffix = "\n00 Home";
@@ -71,9 +69,12 @@ if ($ussdString == "") {
                 } elseif ("2" == $lastSelection) {//referral services
                     $referralService = new ReferralServicesAction();
                     $ussdSession = $referralService->process($ussdSession);
+                 } elseif ("3" == $lastSelection) {//Gen pin
+                    $referralService = new GenerateSecretPin();
+                    $ussdSession = $referralService->process($ussdSession);                   
                 } else {
                     $ussdSession = $menuItems->setMainMenu($ussdSession);
-                    $reply = "CON INVALID INPUT. Only number 1-2 allowed.\n" . $ussdSession->currentFeedbackString;
+                    $reply = "CON INVALID INPUT. Only number 1-3 allowed.\n" . $ussdSession->currentFeedbackString;
                     $ussdSession->currentFeedbackString = $reply;
                 }
             } elseif (MenuItems::FACILITY_DIRECTORY_REQ == $ussdSession->previousFeedbackType ||
@@ -83,8 +84,22 @@ if ($ussdString == "") {
                 MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType ) {
                 $facilityDirectory = new FacilityDirectoryAction();
                 $ussdSession = $facilityDirectory->process($ussdSession);
+
+            } elseif (MenuItems::REFERRAL_SERVICES_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::INITIAL_REF_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::INIT_MFL_CODE_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::APPOINTMENT_DATE_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::CURRENT_REGIMEN_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::ACCEPT_REF_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::MORE_OPTIONS_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::SECRET_PIN_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::TRANSIT_CLIENT_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::NUMBER_OF_DAYS_REQ == $ussdSession->previousFeedbackType ) {
+                $facilityDirectory = new ReferralServicesAction();
+                $ussdSession = $facilityDirectory->process($ussdSession);
             } else {
-                $referralService = new ReferralServicesAction();
+                $referralService = new GenerateSecretPin();
                 $ussdSession = $referralService->process($ussdSession);
             }
 //            $ussdSession->currentFeedbackString = $reply;

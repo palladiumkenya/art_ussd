@@ -35,8 +35,12 @@ class MenuItems {
     const FIRSTNAME_REQ = "FIRSTNAME_REQ";
     const LASTNAME_REQ = "LASTNAME_REQ";
     const ID_NUMBER_REQ = "ID_NUMBER_REQ";
+    const GENERATE_PIN_REQ = "GENERATE_PIN_REQ";
+    const PIN_REQ = "PIN_REQ";
 	var $reply;
     var $userParams;
+
+
   public function setFirstNameRequest($ussdSession) {
 
         $ussdSession->currentFeedbackString = "Enter your First Name to register for this service:";
@@ -62,7 +66,7 @@ class MenuItems {
         $userParams = UssdSession::USER_ID . "=" . $userId . "*";
         $ussdSession->userParams = $userParams;
 
-        $menuArray = array("Facility Directory", "Referral Services");
+        $menuArray = array("Facility Directory", "Referral Services", "Generate Secret pin");
         $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
 //        }
         $ussdSession->currentFeedbackType = self::MAINMENU_REQ;
@@ -74,7 +78,41 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::FACILITY_DIRECTORY_REQ;
         return $ussdSession;
     }
-  
+
+      public function setPinRequest($ussdSession) {
+        $pin = rand(1000,9999);
+        $ussdSession->currentFeedbackString = $pin;
+        $ussdSession->currentFeedbackType = self::PIN_REQ;
+        return $ussdSession;
+    }
+
+    public function setGenPassword($ussdSession) {
+        $clinicTypeList = getOptionType();
+        $reply = "Select Options to Generate pin:";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
+                }
+            }
+            $userParams = $ussdSession->userParams . UssdSession::GENERATE_PIN_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply = "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::GENERATE_PIN_REQ;
+        return $ussdSession;
+    } 
+
+
+
+
+ 
     public function setFacilityNameRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Facility Name:";
         $ussdSession->currentFeedbackType = self::FACILITY_NAME_REQ;
@@ -114,7 +152,7 @@ class MenuItems {
         return $ussdSession;
     }
     public function setReferralServicesRequest($ussdSession) {
-        $menuArray = array("Initiate Referral", "Accept Referral", "Get Patient Details","Transit Client");
+        $menuArray = array("Initiate Referral", "Accept Referral","Transit Client","Get Patient Details");
         $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
         $ussdSession->currentFeedbackType = self::REFERRAL_SERVICES_REQ;
         return $ussdSession;
@@ -191,13 +229,12 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::CURRENT_REGIMEN_REQ;
         return $ussdSession;
     }
+
     public function setSecretPinRequest($ussdSession) {
-        $FourDigitRandomNumber = rand(0001,9999);
         $secretPin = UssdSession::getUserParam(UssdSession::SECRET_PIN_ID, $ussdSession->userParams);
-       // if( $FourDigitRandomNumber == $secretPin){
-            $ussdSession->currentFeedbackString = "Enter this Secret pin: ". $FourDigitRandomNumber;
-       // }
+        $ussdSession->currentFeedbackString = "Enter this Secret pin: ";
         $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
+
         return $ussdSession;
     }
 

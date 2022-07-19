@@ -38,7 +38,7 @@ class UssdSession {
     const PHONE_NUMBER_ID = "PHONE_NUMBER_ID";
     const MFL_CODE_ID = "MFL_CODE_ID";
     const INIT_MFL_CODE_ID = "INIT_MFL_CODE_ID";
-
+    const GENERATE_PIN_ID = "GENERATE_PIN_ID";
     const FACILITY_NAME_ID = "FACILITY_NAME_ID";
     const INITIATE_REFERRAL_ID = "INITIATE_REFERRAL_ID";
     const APPOINTMENT_DATE_ID = "APPOINTMENT_DATE_ID";
@@ -53,6 +53,7 @@ class UssdSession {
     const FIRSTNAME = "FIRSTNAME";
     const LASTNAME ="LASTNAME";
     const IDNUMBER = "IDNUMBER";
+    const PIN_ID = "PIN_ID";
 
  
     

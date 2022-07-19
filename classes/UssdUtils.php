@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function generateMenu($menuArray) {
     $menu = "";
@@ -102,6 +103,33 @@ function isOptions($options) {
             return false;
         }
 }
+
+function isRandom($random){
+ if (!isset($_SESSION[$random]))
+    {
+        $_SESSION[$random] = mt_rand(1000,9999);
+    }
+
+return $random;
+    
+}
+
+function randomNumber($fourDigitRandomNumber){
+    $fourDigitRandomNumber = rand(1000,9999);
+    return $fourDigitRandomNumber;
+    
+}
+
+function gen(){
+    $fourDigitRandomNumber = rand(1000,9999);
+    return $fourDigitRandomNumber;
+}
+
+
+// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($var, true), 3, LOG_FILE);
+// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($var(), true), 3, LOG_FILE);
+
+
 
 function isValidIdMFLCode($mflCode) {
     $mflCode = str_replace(" ", "", $mflCode);

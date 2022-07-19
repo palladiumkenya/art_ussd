@@ -254,3 +254,35 @@ function initialReference($ussdUser) {
     );
     return _execute($sql, $params);
 }
+
+function generatePin($ussdUser) {
+    $sql = "INSERT INTO tbl_facility (msisdn,pin)"
+            . " VALUES(:msisdn,:pin)";
+    $params = array(
+        'msisdn' => $ussdUser->msisdn,
+        ':pin' => $ussdUser->pin,
+
+    );
+    return _execute($sql, $params);
+}
+
+function getDateCreated($msisdn) {
+    $ratesList = array();
+     $sql = "SELECT created_date"
+            . " FROM tbl_facility"
+            . " WHERE msisdn=:msisdn"
+            . "  order by pin DESC"
+            . "  LIMIT 1";
+    $params = array(
+        ':msisdn' => $msisdn,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $rate = new UssdFacility();
+        $rate->created_date = $record['created_date'];
+        $ratesList[] = $rate;
+    }
+    return $ratesList;
+}
+
+
