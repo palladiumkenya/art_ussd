@@ -1,0 +1,1250 @@
+[ERROR : 2022-07-20 10:34:16] _select error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(20): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(190): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-20 10:34:16] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-20 10:34:16] _execute error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:43
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(43): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(71): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-20 10:34:16
+    [:userParams] => 
+)
+[ERROR : 2022-07-20 10:47:06] _select error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(20): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(190): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-20 10:47:06] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-20 10:47:06] _execute error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:43
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(43): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(71): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-20 10:47:06
+    [:userParams] => 
+)
+[ERROR : 2022-07-20 18:40:37] _select error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(20): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(190): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-20 18:40:37] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-20 18:40:37] _execute error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:43
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(43): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(71): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-20 18:40:37
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 13:26:45] _select error: PDOException: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it.
+ in C:\wamp64\www\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(20): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(190): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-21 13:26:45] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 13:26:47] _execute error: PDOException: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it.
+ in C:\wamp64\www\art_ussd\QueryManager.php:43
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(43): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(71): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 13:26:45
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 13:31:58] _select error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(192): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-21 13:31:58] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 13:31:58] _execute error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 13:31:58
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 13:40:13] _select error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(192): _select('SELECT id,msisd...', Array)
+#2 C:\wamp64\www\art_ussd\classes\RootMenuAction.php(8): getUssdUserList('')
+#3 C:\wamp64\www\art_ussd\index.php(39): RootMenuAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT id,msisdn,firstName,lastName,idNumber,dateCreated FROM ussd_users WHERE msisdn=:msisdn LIMIT 1
+Params=Array
+(
+    [:msisdn] => 
+)
+[ERROR : 2022-07-21 13:40:13] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 13:40:13] _execute error: PDOException: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost' (using password: YES) in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=127....', 'root', '''')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 13:40:13
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:05:54] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:05:54] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:05:54
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:44:38] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:44:38] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:44:38
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:52:21] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:52:21] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:52:21
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:53:33] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:53:33] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:53:33
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:54:06] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:54:06] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:54:06
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:54:40] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:54:40] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:54:40
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:54:58] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:54:58] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:54:58
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:55:01] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:55:01] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:55:01
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:55:08] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:55:08] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:55:08
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:56:06] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:56:06] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:56:06
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 14:58:05] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 14:58:06] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 14:58:05
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:10:44] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:10:44] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:10:44
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:13:49] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:13:49] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:13:49
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:14:06] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:14:06] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:14:06
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:14:44] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:14:44] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:14:44
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:36:12] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:36:12] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:36:12
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:36:20] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:36:20] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:36:20
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:37:38] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:37:38] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:37:38
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:37:53] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:37:53] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:37:53
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:38:02] query 
+Params=UssdSession Object
+(
+    [sessionId] => 
+    [msisdn] => 
+    [ussdCode] => 
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [currentFeedbackType] => 
+    [startTime] => 
+    [userParams] => 
+    [test] => 
+)
+[ERROR : 2022-07-21 15:38:02] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sessionId' cannot be null in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 
+    [:msisdn] => 
+    [:ussdCode] => 
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => END Your are not Registered to this USSD Platform.
+    [:currentFeedbackType] => 
+    [:startTime] => 2022-07-21 15:38:02
+    [:userParams] => 
+)
+[ERROR : 2022-07-21 15:38:29] query 
+Params=UssdSession Object
+(
+    [sessionId] => 12313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-21 15:45:01] _execute error: PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'art_refferal.tbl_facility' doesn't exist in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(169): _execute('INSERT INTO tbl...', Array)
+#2 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(117): facilityNameSearch(Object(UssdFacility))
+#3 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(43): FacilityDirectoryAction->facilityNameSearch(Object(UssdSession))
+#4 C:\wamp64\www\art_ussd\index.php(86): FacilityDirectoryAction->process(Object(UssdSession))
+#5 {main}
+SQL=INSERT INTO tbl_facility (msisdn,facilityName) VALUES(:msisdn,:facilityName)
+Params=Array
+(
+    [:msisdn] => 0723863153
+    [:facilityName] => Kilimani
+)
+[ERROR : 2022-07-21 15:45:33] _execute error: PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'art_refferal.tbl_facility' doesn't exist in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(169): _execute('INSERT INTO tbl...', Array)
+#2 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(117): facilityNameSearch(Object(UssdFacility))
+#3 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(43): FacilityDirectoryAction->facilityNameSearch(Object(UssdSession))
+#4 C:\wamp64\www\art_ussd\index.php(86): FacilityDirectoryAction->process(Object(UssdSession))
+#5 {main}
+SQL=INSERT INTO tbl_facility (msisdn,facilityName) VALUES(:msisdn,:facilityName)
+Params=Array
+(
+    [:msisdn] => 0723863153
+    [:facilityName] => Kilimani
+)
+[ERROR : 2022-07-21 15:47:58] _execute error: PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'art_refferal.tbl_facility' doesn't exist in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(169): _execute('INSERT INTO tbl...', Array)
+#2 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(117): facilityNameSearch(Object(UssdFacility))
+#3 C:\wamp64\www\art_ussd\classes\FacilityDirectoryAction.php(43): FacilityDirectoryAction->facilityNameSearch(Object(UssdSession))
+#4 C:\wamp64\www\art_ussd\index.php(86): FacilityDirectoryAction->process(Object(UssdSession))
+#5 {main}
+SQL=INSERT INTO tbl_facility (msisdn,facilityName) VALUES(:msisdn,:facilityName)
+Params=Array
+(
+    [:msisdn] => 0723863153
+    [:facilityName] => Kenya
+)
+[ERROR : 2022-07-21 17:39:17] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12313')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12313
+)
+[ERROR : 2022-07-21 17:39:17] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-21 17:39:22] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12313')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12313
+)
+[ERROR : 2022-07-21 17:39:22] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-21 17:39:25] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12313')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12313
+)
+[ERROR : 2022-07-21 17:39:25] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-21 17:39:35] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12013')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12013
+)
+[ERROR : 2022-07-21 17:39:35] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-21 17:39:44] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12013')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12013
+)
+[ERROR : 2022-07-21 17:39:44] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-21 17:39:47] _select error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:21
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(21): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(83): _select('SELECT sessionI...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(43): getUssdSessionList('12013')
+#3 {main}
+SQL=SELECT sessionId,msisdn,UssdCode,UssdString,UssdStringPrefix,UssdProcessString,previousFeedbackType,currentFeedbackString,currentFeedbackType,startTime,userParams FROM ussd_sessions WHERE sessionId=:sessionId LIMIT 1
+Params=Array
+(
+    [:sessionId] => 12013
+)
+[ERROR : 2022-07-21 17:39:47] _execute error: PDOException: SQLSTATE[HY000] [2002] A socket operation was attempted to an unreachable host.
+ in C:\wamp64\www\art_ussd\QueryManager.php:45
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(45): PDO->__construct('mysql:host=197....', 'hetark', 'Het@rk!!')
+#1 C:\wamp64\www\art_ussd\QueryManager.php(116): _execute('UPDATE ussd_ses...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(112): updateUssdSession(Object(UssdSession))
+#3 {main}
+SQL=UPDATE ussd_sessions SET UssdString=:ussdString,UssdStringPrefix=:ussdStringPrefix, UssdProcessString=:ussdProcessString,previousFeedbackType=:previousFeedbackType,currentFeedbackString=:currentFeedbackString,currentFeedbackType=:currentFeedbackType,userParams=:userParams WHERE sessionId=:sessionId
+Params=Array
+(
+    [:ussdString] => 
+    [:ussdStringPrefix] => 
+    [:ussdProcessString] => 
+    [:previousFeedbackType] => 
+    [:currentFeedbackString] => END Connection error. Please try again.
+    [:currentFeedbackType] => 
+    [:userParams] => 
+    [:sessionId] => 
+)
+[ERROR : 2022-07-22 14:00:22] query 
+Params=UssdSession Object
+(
+    [sessionId] => 12913
+    [msisdn] => 0723863153
+    [ussdCode] => 20211
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)

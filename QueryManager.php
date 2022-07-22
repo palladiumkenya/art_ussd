@@ -1,17 +1,24 @@
 <?php
+include_once('classes\DotEnv.php');
+use DevEnvReader\DotEnv;
+
+(new DotEnv(__DIR__ . '/.env'))->load();
+
+
 include_once('Models.php');
 
 function _select($sql, $params) {
 
-    $username = 'root';
-    $password = '1234';
-    $database = 'art_ussd';
-    $host = 'localhost';
+    $username =$_ENV['DB_USERNAME'];
+    $password =$_ENV['DB_PASSWORD'];
+    $database =$_ENV['DB_DATABASE'];
+    $host =$_ENV['DB_HOST'];
+    $port=$_ENV['DB_PORT'];
   
 
     $res = array();
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+        $pdo = new PDO("mysql:host=$host;port=".$port.";dbname=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -28,13 +35,14 @@ function _select($sql, $params) {
  * Performs database insert, update and delete
  */
 function _execute($sql, $params) {
-    $username = 'root';
-    $password = '1234';
-    $database = 'art_ussd';
-    $host = 'localhost';
+    $username =$_ENV['DB_USERNAME'];
+    $password =$_ENV['DB_PASSWORD'];
+    $database =$_ENV['DB_DATABASE'];
+    $host =$_ENV['DB_HOST'];
+    $port=$_ENV['DB_PORT'];
 
     try {
-        $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+        $pdo = new PDO("mysql:host=$host;port=".$port.";dbname=$database", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
@@ -152,13 +160,34 @@ function mflCodeSend($ussdUser) {
     return _execute($sql, $params);
 }
 function facilityNameSearch($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (msisdn,facilityName)"
-            . " VALUES(:msisdn,:facilityName)";
+    $sql = "INSERT INTO tbl_facility_queries (initiator_msdn,facility_name,create_date)"
+            . " VALUES(:msisdn,:facilityName, :create_date)";
     $params = array(
         ':msisdn' => $ussdUser->msisdn,
         ':facilityName' => $ussdUser->facilityName,
+        ':create_date' => date("Y-m-d H:i:s"),
     );
     return _execute($sql, $params);
+
+
+}
+
+function facilitySearchEngine($searchParam, $searchType) {
+    if($searchType=='name')
+    {
+        $sql = "CALL sp_searchfacility_name(:searchparam)";
+
+    }else
+    {
+        $sql = "CALL sp_searchfacility_mfl(:searchparam)";
+    }
+  
+    $params = array(
+        ':searchparam' => $searchParam
+    );
+    return _execute($sql, $params);
+
+
 }
 
 function updateFacility($ussdUser) {

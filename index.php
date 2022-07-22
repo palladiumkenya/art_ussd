@@ -7,7 +7,7 @@ $sessionId = isset($_GET['sessionId']) ? $_GET['sessionId'] : '';
 $msisdn = isset($_GET['msisdn']) ? $_GET['msisdn'] : '';
 $serviceCode = isset($_GET['serviceCode']) ? $_GET['serviceCode'] : '';
 $ussdString = isset($_GET['text']) ? $_GET['text'] : '';
-
+//print_r($_REQUEST); exit();
 
 // date_default_timezone_set('Africa/Nairobi');
 // define("LOG_FILE", "error.log");
