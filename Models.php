@@ -54,6 +54,7 @@ class UssdSession {
     const LASTNAME ="LASTNAME";
     const IDNUMBER = "IDNUMBER";
     const PIN_ID = "PIN_ID";
+    const MFL_CODE_REQUEST_ID = "MFL_CODE_REQUEST_ID";
 
  
     
@@ -73,12 +74,12 @@ class UssdSession {
         var $type_id;
         var $type_desc;
     }
-        class OptionType {
+class OptionType {
         var $type_id;
         var $type_desc;
-    }
+}
 
-    class UssdUser {
+class UssdUser {
     var $id;
     var $msisdn;
     var $firstName;
@@ -88,7 +89,7 @@ class UssdSession {
 
 }
 
-    class UssdFacility {
+class UssdFacility {
     var $id;
     var $msisdn;
     var $facilityName;
@@ -98,6 +99,7 @@ class UssdSession {
     var $daysOfAppointment;
     var $currentRegime;
     var $pin;
+    var $upn;
     var $numberOfDrugs;
     var $optionType;
     var $cccNumber;

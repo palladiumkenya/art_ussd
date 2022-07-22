@@ -40,7 +40,9 @@ class FacilityDirectoryAction {
                  if (isValidName($facilityName)) {
                     $userParams = $ussdSession->userParams . UssdSession::FACILITY_NAME_ID . "=" . $facilityName . "*";
                     $ussdSession->userParams = $userParams;
-                    $reply = "END " . self::facilityNameSearch($ussdSession);
+                    $ussdSession = $menuItems->setSearchFacilityNameRequest($ussdSession,$facilityName);
+                    $reply = "CON" . $ussdSession->currentFeedbackString. $menuSuffix;;
+                    
                 } else {
                     $ussdSession = $menuItems->setFacilityNameRequest($ussdSession);
                         $reply = "CON The name you entered contains NUMBERS or INVALID characters.\n" . $ussdSession->currentFeedbackString;
@@ -73,20 +75,25 @@ class FacilityDirectoryAction {
 
             } elseif (MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType) {
                 $mflCode = trim($params[count($params) - 1]);
+                error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($mflCode, true), 3, LOG_FILE);
                  if (isValidIdMFLCode($mflCode)) {
                     $userParams = $ussdSession->userParams . UssdSession::MFL_CODE_ID . "=" . $mflCode . "*";
                     $ussdSession->userParams = $userParams;
-                    $reply = "END " . self::mflCodeSearch($ussdSession);
+                   
+                    $ussdSession = $menuItems->setSearchMFLCodeRequest($ussdSession,$mflCode);
+                    $reply = "CON" . $ussdSession->currentFeedbackString. $menuSuffix;
                 } else {
                     $ussdSession = $menuItems->setMFLCodeRequest($ussdSession);
                         $reply = "CON The code you entered is INVALID characters.\n" . $ussdSession->currentFeedbackString;
-                }            
+                }   
+          
             } else {
                     $reply = "END Connection error. Please try again.";
             }
                 $ussdSession->currentFeedbackString = $reply;
                 return $ussdSession;           
     }
+
     function mflCodeSearch($ussdSession){
         $ussdMfl = new UssdFacility();
         $ussdMfl->msisdn = $ussdSession->msisdn;

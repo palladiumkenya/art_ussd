@@ -198,13 +198,12 @@ function getUssdUserList($msisdn) {
 
 
 function createUssdUser($ussdUser) {
-    $sql = "INSERT INTO ussd_users (msisdn,firstName,lastName,idNumber)"
-            . " VALUES(:msisdn,:firstName,:lastName,:idNumber)";
+    $sql = "INSERT INTO ussd_users (msisdn,firstName,lastName)"
+            . " VALUES(:msisdn,:firstName,:lastName)";
     $params = array(
         ':msisdn' => $ussdUser->msisdn,
         ':firstName' => $ussdUser->firstName,
         ':lastName' => $ussdUser->lastName,
-        ':idNumber' => $ussdUser->idNumber,
     );
     return _execute($sql, $params);
 }
@@ -220,10 +219,14 @@ function saveAcceptRef($ussdUser) {
     );
     return _execute($sql, $params);
 }
+
+
+
 function secretPin($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (cccNumber,pin)"
-            . " VALUES(:cccNumber,:pin)";
+    $sql = "INSERT INTO tbl_facility (cccNumber,pin,msisdn)"
+            . " VALUES(:cccNumber,:pin,:msisdn)";
     $params = array(
+        ':msisdn' => $ussdUser->msisdn,
         ':cccNumber' => $ussdUser->cccNumber,
         ':pin' => $ussdUser->pin,
 
@@ -232,11 +235,12 @@ function secretPin($ussdUser) {
 }
 
 function transit($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (cccNumber,numberOfDrugs)"
-            . " VALUES(:cccNumber,:numberOfDrugs)";
+    $sql = "INSERT INTO tbl_facility (cccNumber,numberOfDrugs,msisdn)"
+            . " VALUES(:cccNumber,:numberOfDrugs,:msisdn)";
     $params = array(
         ':cccNumber' => $ussdUser->cccNumber,
         ':numberOfDrugs' => $ussdUser->numberOfDrugs,
+        ':msisdn' => $ussdUser->msisdn,
 
     );
     return _execute($sql, $params);
@@ -244,23 +248,25 @@ function transit($ussdUser) {
 
 
 function initialReference($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (cccNumber,mflCode,daysOfAppointment,currentRegime)"
-            . " VALUES(:cccNumber,:mflCode,:daysOfAppointment,:currentRegime)";
+    $sql = "INSERT INTO tbl_facility (cccNumber,mflCode,daysOfAppointment,currentRegime,msisdn)"
+            . " VALUES(:cccNumber,:mflCode,:daysOfAppointment,:currentRegime,:msisdn)";
     $params = array(
         ':cccNumber' => $ussdUser->cccNumber,
         ':mflCode' => $ussdUser->mflCode,
         ':daysOfAppointment' => $ussdUser->daysOfAppointment,
         ':currentRegime' => $ussdUser->currentRegime,
+        ':msisdn' => $ussdUser->msisdn,
     );
     return _execute($sql, $params);
 }
 
 function generatePin($ussdUser) {
+    $pin = rand(1000,9999);
     $sql = "INSERT INTO tbl_facility (msisdn,pin)"
             . " VALUES(:msisdn,:pin)";
     $params = array(
         'msisdn' => $ussdUser->msisdn,
-        ':pin' => $ussdUser->pin,
+        ':pin' => $pin,
 
     );
     return _execute($sql, $params);
@@ -268,7 +274,7 @@ function generatePin($ussdUser) {
 
 function getDateCreated($msisdn) {
     $ratesList = array();
-     $sql = "SELECT created_date"
+     $sql = "SELECT created_date, msisdn,pin"
             . " FROM tbl_facility"
             . " WHERE msisdn=:msisdn"
             . "  order by pin DESC"
@@ -279,10 +285,137 @@ function getDateCreated($msisdn) {
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
         $rate = new UssdFacility();
+        $rate->msisdn = $record['msisdn'];
+         $rate->pin = $record['pin'];
         $rate->created_date = $record['created_date'];
         $ratesList[] = $rate;
     }
     return $ratesList;
 }
 
+function searchMfl($mflCode) {
+    $mflList = array();
+    $sql = "SELECT mflCode,created_date, msisdn"
+            . " FROM tbl_facility"
+            . " WHERE mflCode LIKE '%$mflCode'"
+            . "  order by id DESC"
+            . " LIMIT 1";
+    $params = array(
+        ':mflCode' => $mflCode,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $mflCategory = new UssdFacility();
 
+        $mflCategory->mflCode = $record['mflCode'];
+         $mflCategory->msisdn = $record['msisdn'];
+         $mflCategory->created_date = $record['created_date'];
+        $mflList[] = $mflCategory;
+    }
+    return $mflList;
+}
+
+function getPin($msisdn) {
+    $ratesList = array();
+     $sql = "SELECT pin"
+            . " FROM tbl_facility"
+            . " WHERE msisdn=:msisdn"
+            . " AND pin is not null"
+            . "  order by id DESC"
+            . "  LIMIT 1";
+    $params = array(
+        ':msisdn' => $msisdn,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $rate = new UssdFacility();
+        $rate->pin = $record['pin'];
+        $ratesList[] = $rate;
+    }
+    return $ratesList;
+}
+function searchFacilityName($facilityName) {
+    $mflList = array();
+     $sql = "SELECT rv.facilityName,rv.created_date,rv.mflCode, rv.cccNumber,rv.pin,r.type_desc, rv.msisdn,rv.upn,rv.currentRegime"
+            . " FROM tbl_facility rv"
+            . " LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
+            . " WHERE facilityName LIKE '%$facilityName'"
+            . "  order by id DESC"
+            . " LIMIT 1";
+    $params = array(
+        ':facilityName' => $facilityName,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $mflCategory = new UssdFacility();
+
+        $mflCategory->cccNumber = $record['cccNumber'];
+        $mflCategory->pin = $record['pin'];
+        $mflCategory->facilityName = $record['facilityName'];
+        $mflCategory->type_desc = $record['type_desc'];
+        $mflCategory->mflCode = $record['mflCode'];
+        $mflCategory->currentRegime = $record['currentRegime'];    
+        $mflCategory->upn = $record['upn'];
+        $mflCategory->msisdn = $record['msisdn'];
+        $mflCategory->created_date = $record['created_date'];
+        $mflList[] = $mflCategory;
+    }
+    return $mflList;
+}
+
+
+function searchPatientDetails($cccNumber) {
+    $mflList = array();
+     $sql = "SELECT rv.facilityName,rv.created_date,rv.mflCode, rv.cccNumber,rv.pin,r.type_desc, rv.msisdn,rv.upn,rv.currentRegime"
+            . " FROM tbl_facility rv"
+            . " LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
+            . " WHERE cccNumber LIKE '%$cccNumber'"
+            . "  order by id DESC"
+            . " LIMIT 1";
+    $params = array(
+        ':cccNumber' => $cccNumber,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $mflCategory = new UssdFacility();
+
+        $mflCategory->cccNumber = $record['cccNumber'];
+        $mflCategory->pin = $record['pin'];
+        $mflCategory->facilityName = $record['facilityName'];
+        $mflCategory->type_desc = $record['type_desc'];
+        $mflCategory->mflCode = $record['mflCode'];
+        $mflCategory->currentRegime = $record['currentRegime'];    
+        $mflCategory->upn = $record['upn'];
+        $mflCategory->msisdn = $record['msisdn'];
+        $mflCategory->created_date = $record['created_date'];
+        $mflList[] = $mflCategory;
+    }
+    return $mflList;
+}
+
+
+// function searchPatientDetails($cccNumber) {
+//     $mflList = array();
+//     $sql = "SELECT rv.facilityName,rv.created_date, rv.cccNumber,rv.pin,r.type_desc"
+//             . " FROM tbl_facility rv"
+//             . "LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
+//             . " WHERE cccNumber LIKE '%$cccNumber'"
+//             . " AND pin is not null"
+//             . "  order by id DESC"
+//             . " LIMIT 1";
+//     $params = array(
+//          ':cccNumber' => $cccNumber,
+//         //':pin' => $pin,
+       
+//     );
+//     $resultset = _select($sql, $params);
+//     foreach ($resultset as $record) {
+//         $patientSearchCategory = new UssdFacility();
+//         $patientSearchCategory->pin = $record['pin'];
+//         $patientSearchCategory->cccNumber = $record['cccNumber'];
+//         $patientSearchCategory->type_desc = $record['type_desc'];
+//         $patientSearchCategory->created_date = $record['created_date'];
+//         $searchList[] = $patientSearchCategory;
+//     }
+//     return $searchList;
+// }

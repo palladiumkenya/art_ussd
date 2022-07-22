@@ -80,9 +80,9 @@ function isValidIdCCCNumber($cccNumber) {
     }
 }
 function isValidPhone($phone) {
-    if ($phone == " ") {
-        return false;
-    } elseif (!is_numeric($phone) && strlen($mflCode) < 10) {
+
+    $phone = str_replace(" ", "", $phone);
+    if (strlen($phone) < 10) {
         return false;
     } else {
         return true;
@@ -114,26 +114,10 @@ return $random;
     
 }
 
-function randomNumber($fourDigitRandomNumber){
-    $fourDigitRandomNumber = rand(1000,9999);
-    return $fourDigitRandomNumber;
-    
-}
-
-function gen(){
-    $fourDigitRandomNumber = rand(1000,9999);
-    return $fourDigitRandomNumber;
-}
-
-
-// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($var, true), 3, LOG_FILE);
-// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($var(), true), 3, LOG_FILE);
-
-
 
 function isValidIdMFLCode($mflCode) {
     $mflCode = str_replace(" ", "", $mflCode);
-    if (strlen($mflCode) < 4 && strlen($mflCode) > 5) {
+    if (strlen($mflCode) < 4 || strlen($mflCode) > 5) {
         return false;
     } else {
         return true;

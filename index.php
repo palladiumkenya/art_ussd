@@ -1,21 +1,21 @@
 <?php
-date_default_timezone_set('Africa/Nairobi');
-define("LOG_FILE", "error.log");
-
-$_GET = $_REQUEST;
-$sessionId = isset($_GET['sessionId']) ? $_GET['sessionId'] : '';
-$msisdn = isset($_GET['msisdn']) ? $_GET['msisdn'] : '';
-$serviceCode = isset($_GET['serviceCode']) ? $_GET['serviceCode'] : '';
-$ussdString = isset($_GET['text']) ? $_GET['text'] : '';
-
-
 // date_default_timezone_set('Africa/Nairobi');
 // define("LOG_FILE", "error.log");
-// error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($_REQUEST, true), 3, LOG_FILE);
-// $sessionId = isset($_REQUEST['sessionId']) ? $_REQUEST['sessionId'] : '';
-// $msisdn = isset($_REQUEST['phoneNumber']) ? $_REQUEST['phoneNumber'] : '';
-// $serviceCode = isset($_REQUEST['serviceCode']) ? $_REQUEST['serviceCode'] : '';
-// $ussdString = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
+
+// $_GET = $_REQUEST;
+// $sessionId = isset($_GET['sessionId']) ? $_GET['sessionId'] : '';
+// $msisdn = isset($_GET['msisdn']) ? $_GET['msisdn'] : '';
+// $serviceCode = isset($_GET['serviceCode']) ? $_GET['serviceCode'] : '';
+// $ussdString = isset($_GET['text']) ? $_GET['text'] : '';
+
+
+date_default_timezone_set('Africa/Nairobi');
+define("LOG_FILE", "error.log");
+error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($_REQUEST, true), 3, LOG_FILE);
+$sessionId = isset($_REQUEST['sessionId']) ? $_REQUEST['sessionId'] : '';
+$msisdn = isset($_REQUEST['phoneNumber']) ? $_REQUEST['phoneNumber'] : '';
+$serviceCode = isset($_REQUEST['serviceCode']) ? $_REQUEST['serviceCode'] : '';
+$ussdString = isset($_REQUEST['text']) ? $_REQUEST['text'] : '';
 
 
 include_once("Models.php");
@@ -47,10 +47,15 @@ if ($ussdString == "") {
         $ussdSession->ussdProcessString = $ussdString;
         $ussdSession->previousFeedbackType = $ussdSession->currentFeedbackType;
 
-        if (MenuItems::AUTHORISATION_REQ == $ussdSession->previousFeedbackType) {
-              $ussdSession = new UssdSession();
-              $reply = "END Your are not Registered to this USSD Platform..";
-              $ussdSession->currentFeedbackString = $reply;
+        // if (MenuItems::AUTHORISATION_REQ == $ussdSession->previousFeedbackType) {
+        //       $ussdSession = new UssdSession();
+        //       $reply = "END Your are not Registered to this USSD Platform..";
+        //       $ussdSession->currentFeedbackString = $reply;
+        if (MenuItems::FIRSTNAME_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::LASTNAME_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::ID_NUMBER_REQ == $ussdSession->previousFeedbackType) {
+            $registration = new RegistrationAction();
+            $ussdSession = $registration->process($ussdSession);
     
         } else {
             $menuItems = new MenuItems();
@@ -81,6 +86,8 @@ if ($ussdString == "") {
                 MenuItems::FACILITY_NAME_REQ == $ussdSession->previousFeedbackType ||
                 MenuItems::CLINIC_TYPE_REQ == $ussdSession->previousFeedbackType ||
                 MenuItems::PHONE_NUMBER_REQ == $ussdSession->previousFeedbackType ||
+                MenuItems::MFL_CODE_REQUEST == $ussdSession->previousFeedbackType ||
+
                 MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType ) {
                 $facilityDirectory = new FacilityDirectoryAction();
                 $ussdSession = $facilityDirectory->process($ussdSession);

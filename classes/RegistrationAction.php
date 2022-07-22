@@ -31,8 +31,10 @@ class RegistrationAction {
                 if (isValidName($lastName)) {
                     $userParams = $ussdSession->userParams . UssdSession::LASTNAME . "=" . $lastName . "*";
                     $ussdSession->userParams = $userParams;
-                    $ussdSession = $menuItems->setIdNumberRequest($ussdSession);
-                    $reply = "CON " . $ussdSession->currentFeedbackString;
+                    $ussdSession->userParams = $userParams;
+                    $reply = "END " . self::registerNewUser($ussdSession);
+                    // $ussdSession = $menuItems->setIdNumberRequest($ussdSession);
+                    // $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
                     $ussdSession = $menuItems->setLastNameRequest($ussdSession);
 
@@ -59,9 +61,9 @@ class RegistrationAction {
         $ussdUser->msisdn = $ussdSession->msisdn;
         $ussdUser->firstName = UssdSession::getUserParam(UssdSession::FIRSTNAME, $ussdSession->userParams);
         $ussdUser->lastName = UssdSession::getUserParam(UssdSession::LASTNAME, $ussdSession->userParams);
-        $ussdUser->idNumber = UssdSession::getUserParam(UssdSession::IDNUMBER, $ussdSession->userParams);
+       // $ussdUser->idNumber = UssdSession::getUserParam(UssdSession::IDNUMBER, $ussdSession->userParams);
         
-        if(createUssdUser($ussdUser)){
+        if(createUssdUser($ussdUser) && generatePin($ussdUser)){
                 return "You have been registered successfully!";
             
         } else {

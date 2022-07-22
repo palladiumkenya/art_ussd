@@ -37,11 +37,15 @@ class MenuItems {
     const ID_NUMBER_REQ = "ID_NUMBER_REQ";
     const GENERATE_PIN_REQ = "GENERATE_PIN_REQ";
     const PIN_REQ = "PIN_REQ";
+    const MFL_CODE_REQUEST = "MFL_CODE_REQUEST";
+    const PATIENT_DETAILS_SEARCH_REQUEST = "PATIENT_DETAILS_SEARCH_REQUEST";
+    const TRANSIT_SEARCH_REQUEST = "TRANSIT_SEARCH_REQUEST";
+
 	var $reply;
     var $userParams;
 
 
-  public function setFirstNameRequest($ussdSession) {
+    public function setFirstNameRequest($ussdSession) {
 
         $ussdSession->currentFeedbackString = "Enter your First Name to register for this service:";
         $ussdSession->currentFeedbackType = self::FIRSTNAME_REQ;
@@ -107,12 +111,7 @@ class MenuItems {
         $ussdSession->currentFeedbackString = $reply;
         $ussdSession->currentFeedbackType = self::GENERATE_PIN_REQ;
         return $ussdSession;
-    } 
-
-
-
-
- 
+    }  
     public function setFacilityNameRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Facility Name:";
         $ussdSession->currentFeedbackType = self::FACILITY_NAME_REQ;
@@ -152,19 +151,19 @@ class MenuItems {
         return $ussdSession;
     }
     public function setReferralServicesRequest($ussdSession) {
-        $menuArray = array("Initiate Referral", "Accept Referral","Transit Client","Get Patient Details");
+        $menuArray = array("Initiate Referral", "Accept Referral","Get Patient Details","Transit Client");
         $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
         $ussdSession->currentFeedbackType = self::REFERRAL_SERVICES_REQ;
         return $ussdSession;
     }
     public function setTransitClientRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Patient CCC Number:";
-        $ussdSession->currentFeedbackType = self::PATIENT_DETAILS_CCC_NUMBER_REQ;
-        return $ussdSession;
+        $ussdSession->currentFeedbackType = self::TRANSIT_CLIENT_CCC_NUMBER_REQ;
+        return $ussdSession; 
     }
     public function setPatientDetailsRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Patient CCC Number:";
-        $ussdSession->currentFeedbackType = self::TRANSIT_CLIENT_CCC_NUMBER_REQ;
+        $ussdSession->currentFeedbackType = self::PATIENT_DETAILS_CCC_NUMBER_REQ;
         return $ussdSession;
     }
      public function setAcceptReferralRequest($ussdSession) {
@@ -183,9 +182,7 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::CCC_NUMBER_REQ;
         return $ussdSession;
     }
-
- 
-        public function setMoreOptionsRequest($ussdSession) {
+    public function setMoreOptionsRequest($ussdSession) {
         $clinicTypeList = getOptionType();
         $reply = "Select Options:";
         if (count($clinicTypeList) > 0) {
@@ -214,7 +211,7 @@ class MenuItems {
         return $ussdSession;
     }
 
-        public function setFacilityInitMFLCodeRequest($ussdSession) {
+    public function setFacilityInitMFLCodeRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Facility MFL Code:";
         $ussdSession->currentFeedbackType = self::INIT_MFL_CODE_REQ;
         return $ussdSession;
@@ -229,23 +226,110 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::CURRENT_REGIMEN_REQ;
         return $ussdSession;
     }
-
+    // public function setSecretPinRequest($ussdSession) {
+    //     $ussdSession->currentFeedbackString = "Enter Pin:";
+    //     $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
+    //     return $ussdSession;
+    // }
     public function setSecretPinRequest($ussdSession) {
-        $secretPin = UssdSession::getUserParam(UssdSession::SECRET_PIN_ID, $ussdSession->userParams);
-        $ussdSession->currentFeedbackString = "Enter this Secret pin: ";
+        $secretPin = getPin($ussdSession->msisdn); 
+        $pin = $secretPin[0]->pin; 
+        error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from \nParams=" . print_r($secretPin, true), 3, LOG_FILE);
+        $ussdSession->currentFeedbackString = "Enter this Secret pin: ".$pin;
         $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
-
         return $ussdSession;
+        
     }
-
-
-
     public function setNumberOfDaysRequest($ussdSession) {
         $ussdSession->currentFeedbackString = "Enter Number of Days:";
         $ussdSession->currentFeedbackType = self::NUMBER_OF_DAYS_REQ;
         return $ussdSession;
     }
 
-    
+    public function setSearchFacilityNameRequest($ussdSession,$facilityName) {
+        $mflCodeRequestsList = searchFacilityName($facilityName);
+        $reply = "Search by Facility Name:";
+        if (count($mflCodeRequestsList) > 0) {
+            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+                $reply .= "\n" . "Dear Provider, Here is the facility \n we have found in our directory: "
+                .$mflCodeRequestsList[$i]->facilityName. "\n ( MFL "
+                . $mflCodeRequestsList[$i]->mflCode." )\n, "  . $mflCodeRequestsList[$i]->type_desc." CCC Number: \n". $mflCodeRequestsList[$i]->cccNumber." .MOH";
+            }
+        } else {
+            $reply = "Facility not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+        return $ussdSession;
+    }
+    public function setSearchPatientDetailsRequest($ussdSession,$cccNumber) {
+        $mflCodeRequestsList = searchPatientDetails($cccNumber);
+      
+        $reply = "Search Patient Details: ";
+        if (count($mflCodeRequestsList) > 0 ) {
+            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+                $reply .= "\n" . "Dear Provider, client with UPN \n"
+                .$mflCodeRequestsList[$i]->upn. "\n Treatment details; Regimen: \n"
+                . $mflCodeRequestsList[$i]->currentRegime." and CCC number is\n "  . $mflCodeRequestsList[$i]->cccNumber." \n Clinician number: ".$mflCodeRequestsList[$i]->msisdn;
+            }
+        } else {
+            $reply = "The CCC Number is Invalid.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::PATIENT_DETAILS_SEARCH_REQUEST;
+        return $ussdSession;
+    }
 
+
+    public function setSearchTransistRequest($ussdSession,$cccNumber) {
+        $mflCodeRequestsList = searchPatientDetails($cccNumber);
+      
+        $reply = "Transist Client: ";
+        if (count($mflCodeRequestsList) > 0 ) {
+            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+                $reply .= "\n" . "Dear Provider, client with UPN \n"
+                .$mflCodeRequestsList[$i]->upn. "\n Treatment details; Regimen: \n"
+                . $mflCodeRequestsList[$i]->currentRegime." and CCC number is\n "  . $mflCodeRequestsList[$i]->cccNumber;
+            }
+        } else {
+            $reply = "The CCC Number is Invalid.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::TRANSIT_SEARCH_REQUEST;
+        return $ussdSession;
+    }
+
+
+    public function setSearchMFLCodeRequest($ussdSession,$mflCode) {
+        $mflCodeRequestsList = searchMfl($mflCode);
+
+        $reply = "Search by MFL code:";
+        if (count($mflCodeRequestsList) > 0) {
+            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+                $reply .= "\n" . date_format(new DateTime($mflCodeRequestsList[$i]->created_date), "d-m-y ") . " MFL Code. " . $mflCodeRequestsList[$i]->mflCode. " Phone. " . $mflCodeRequestsList[$i]->msisdn;
+            }
+        } else {
+            $reply = "No MFL code was found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+        return $ussdSession;
+    }
+
+    // public function setPatientDetailsRequest($ussdSession,$facilityName) {
+    //     $mflCodeRequestsList = searchFacilityName($facilityName);
+    //     $reply = "Search by Facility Name:";
+    //     if (count($mflCodeRequestsList) > 0) {
+    //         for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+    //             $reply .= "\n" . "Dear Provider, here'\n
+    //             is the facility we \n
+    //             have found in our directory\n "  . $mflCodeRequestsList[$i]->facilityName. "( " . $mflCodeRequestsList[$i]->mflCode .")";
+    //         }
+    //     } else {
+    //         $reply = "Facility with that Name was not found.";
+    //     }
+    //     $ussdSession->currentFeedbackString = $reply;
+    //     $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+    //     return $ussdSession;
+    // }
 }

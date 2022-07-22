@@ -14,9 +14,11 @@ class RootMenuAction {
             $reply = "CON " . $ussdSession->currentFeedbackString;
             $ussdSession->currentFeedbackString = $reply;
         } else {
-            $ussdSession = new UssdSession();
-            $reply = "END Your are not Registered to this USSD Platform.";
-            $ussdSession->currentFeedbackString = $reply;
+                $registration = new RegistrationAction();
+            $ussdSession = $registration->process($ussdSession);
+            // $ussdSession = new UssdSession();
+            // $reply = "END Your are not Registered to this USSD Platform.";
+            // $ussdSession->currentFeedbackString = $reply;
         }
         return $ussdSession;
     }

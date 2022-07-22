@@ -113,40 +113,76 @@ class ReferralServicesAction {
                 }
 
      ///// Third Option
-           } elseif (MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
-                $cccNumber = trim($params[count($params) - 1]);
-                if (isValidIdCCCNumber($cccNumber)) {
-                    $userParams = UssdSession::PATIENT_DETAILS_CCC_NUMBER_ID . "=" . $cccNumber . "*";
-                    $ussdSession->userParams = $userParams;
+            } elseif (MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
+                $phone = trim($params[count($params) - 1]);
+                 if (isValidIdCCCNumber($phone)) {
+                    $userParams = $ussdSession->userParams . UssdSession::PATIENT_DETAILS_CCC_NUMBER_ID . "=" . $phone . "*";
                     $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
                     $ussdSession = $menuItems->setPatientDetailsRequest($ussdSession);
-                        $reply = "CON The CCC Number you have entered is INVALID.\n" . $ussdSession->currentFeedbackString;
-                }
+                        $reply = "CON The CCC Number you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
+                } 
+
+            // } elseif (MenuItems::SECRET_PIN_REQ == $ussdSession->previousFeedbackType) {
+            //     $mflCode = trim($params[count($params) - 2]);
+            //     error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($mflCode, true), 3, LOG_FILE);
+            //      if (isValidPIN($mflCode)) {
+            //         $userParams = $ussdSession->userParams . UssdSession::SECRET_PIN_ID . "=" . $mflCode . "*";
+            //         $ussdSession->userParams = $userParams;
+                   
+            //         $ussdSession = $menuItems->setSearchPatientDetailsRequest($ussdSession,$mflCode);
+            //         $reply = "CON" . $ussdSession->currentFeedbackString. $menuSuffix;
+            //     } else {
+            //         $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
+            //             $reply = "CON The code you entered is INVALID characters.\n" . $ussdSession->currentFeedbackString;
+            //     } 
+
+            // } elseif (MenuItems::SECRET_PIN_REQ == $ussdSession->previousFeedbackType) {
+            //     $phone = trim($params[count($params) - 1]);
+            //      if (isValidPIN($phone)) {
+            //         $userParams = $ussdSession->userParams . UssdSession::SECRET_PIN_ID . "=" . $phone . "*";
+            //         $ussdSession->userParams = $userParams;
+            //         $reply = "END " . self::setSearchPatientDetailsRequest($ussdSession,$phone);
+            //     } else {
+            //         $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
+            //             $reply = "CON The CCC Number you have entered is INVALID.\n" . $ussdSession->currentFeedbackString;
+            //     } 
+           // } elseif (MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
+           //      $cccNumber = trim($params[count($params) - 1]);
+           //      if (isValidIdCCCNumber($cccNumber)) {
+           //          $userParams = UssdSession::PATIENT_DETAILS_CCC_NUMBER_ID . "=" . $cccNumber . "*";
+           //          $ussdSession->userParams = $userParams;
+           //          $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
+           //          $reply = "CON " . $ussdSession->currentFeedbackString;
+           //      } else {
+           //          $ussdSession = $menuItems->setPatientDetailsRequest($ussdSession);
+           //              $reply = "CON The CCC Number you have entered is INVALID.\n" . $ussdSession->currentFeedbackString;
+           //      }
 
            } elseif (MenuItems::SECRET_PIN_REQ == $ussdSession->previousFeedbackType) {
-                $phone = trim($params[count($params) - 1]);
-                $ratesList = getDateCreated($ussdSession->msisdn);
-                $dateCreated = $ratesList[0]->created_date;
-                $dateCreated1 = new DateTime($dateCreated);
-                $now = new DateTime();
-                $dateDiff = $dateCreated1->diff($now)->format("%d");    
-
-                if($dateDiff < 7){
-                      if (isValidPIN($phone)) {
-                         $userParams = $ussdSession->userParams . UssdSession::SECRET_PIN_ID . "=" . $phone . "*";
-                         $ussdSession->userParams = $userParams;
-                         $reply = "END " . self::secretPin($ussdSession);             
+                      $cccNumber = trim($params[count($params) - 2]);
+                       $phone = trim($params[count($params) - 1]); 
+                       $ratesList = getDateCreated($ussdSession->msisdn);
+                       $dateCreated = $ratesList[0]->created_date;            
+                       $dateCreated1 = new DateTime($dateCreated);
+                       $now = new DateTime();
+                       $dateDiff = $dateCreated1->diff($now)->format("%d");  
+                      if($dateDiff < 7){
+                       
+                      if (isValidPIN($cccNumber)) {
+                        $userParams = $ussdSession->userParams . UssdSession::SECRET_PIN_ID . "=" . $cccNumber . "*";
+                        $ussdSession = $menuItems->setSearchPatientDetailsRequest($ussdSession,$cccNumber);
+                        $reply = "END" . $ussdSession->currentFeedbackString;          
                        } else {
                             $ussdSession = $menuItems->setSecretPinRequest($ussdSession);
                             $reply = "CON The Pin you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
                        } 
 
-                }else{
-                    $reply = "END Your secret pin is expired. Please generate new pin";
-                }
-                
+                     }else{
+                       $reply = "END Your secret pin is expired.\n Please generate new pin";
+                     }     
+
 ///Fouth option
            } elseif (MenuItems::TRANSIT_CLIENT_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
                 $cccNumber = trim($params[count($params) - 1]);
@@ -198,6 +234,7 @@ class ReferralServicesAction {
 
     function secretPin($ussdSession){
         $ussdUser = new UssdFacility();
+         $ussdUser->msisdn = $ussdSession->msisdn;
         $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::PATIENT_DETAILS_CCC_NUMBER_ID, $ussdSession->userParams);
         $ussdUser->pin = UssdSession::getUserParam(UssdSession::SECRET_PIN_ID, $ussdSession->userParams);
         if(secretPin($ussdUser)){
@@ -209,9 +246,10 @@ class ReferralServicesAction {
 
     function transit($ussdSession){
         $ussdUser = new UssdFacility();
+         $ussdUser->msisdn = $ussdSession->msisdn;
         $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::TRANSIT_CLIENT_CCC_NUMBER_ID, $ussdSession->userParams);
         $ussdUser->numberOfDrugs = UssdSession::getUserParam(UssdSession::NUMBER_OF_DAYS_ID, $ussdSession->userParams);
-        if(secretPin($ussdUser)){
+        if(transit($ussdUser)){
             return "You have send a request successfully!";  
         } else {
             return "There was an error in your request. Please try again.";           
@@ -220,6 +258,7 @@ class ReferralServicesAction {
 
     function saveAcceptRef($ussdSession){
         $ussdUser = new UssdFacility();
+         $ussdUser->msisdn = $ussdSession->msisdn;
         $ussdUser->cccNumber = UssdSession::getUserParam(UssdSession::ACCEPT_REF_CCC_NUMBER_ID, $ussdSession->userParams);
         $ussdUser->optionType = UssdSession::getUserParam(UssdSession::MORE_OPTIONS_ID, $ussdSession->userParams);
         if(secretPin($ussdUser)){
