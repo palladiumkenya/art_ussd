@@ -172,7 +172,10 @@ function facilityNameSearch($ussdUser) {
 
 }
 
+
+
 function facilitySearchEngine($searchParam, $searchType) {
+    //search by name or MFL
     if($searchType=='name')
     {
         $sql = "CALL sp_searchfacility_name(:searchparam)";
@@ -313,5 +316,7 @@ function getDateCreated($msisdn) {
     }
     return $ratesList;
 }
+
+
 
 

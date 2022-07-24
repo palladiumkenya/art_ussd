@@ -92,7 +92,7 @@ class FacilityDirectoryAction {
         $ussdMfl->msisdn = $ussdSession->msisdn;
         $ussdMfl->mflCode = UssdSession::getUserParam(UssdSession::MFL_CODE_ID, $ussdSession->userParams);
         if(mflCodeSend($ussdMfl)){
-            return "You have send MFL Code successfully!";  
+            return "Your request is being processed, kindly wait for the result message.";  
         } else {
             return "There was an error in your request. Please try again.";           
         }
@@ -115,7 +115,7 @@ class FacilityDirectoryAction {
         $ussdFacility->msisdn = $ussdSession->msisdn;
         $ussdFacility->facilityName = UssdSession::getUserParam(UssdSession::FACILITY_NAME_ID, $ussdSession->userParams);
         if(facilityNameSearch($ussdFacility)){
-            return "You have send facility Name successfully!";  
+            return "Your request is being processed, kindly wait for the result message.";  
         } else {
             return "There was an error in your request. Please try again.";           
         }

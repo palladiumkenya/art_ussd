@@ -1248,3 +1248,227 @@ Params=UssdSession Object
     [userParams] => USER_ID=1*
     [test] => 
 )
+[ERROR : 2022-07-24 22:20:00] query 
+Params=UssdSession Object
+(
+    [sessionId] => 12313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:00] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '12313' for key 'PRIMARY' in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 12313
+    [:msisdn] => 0723863153
+    [:ussdCode] => 21211
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-07-24 22:20:00
+    [:userParams] => USER_ID=1*
+)
+[ERROR : 2022-07-24 22:20:08] query 
+Params=UssdSession Object
+(
+    [sessionId] => 12313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211*text=1
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:08] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '12313' for key 'PRIMARY' in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 12313
+    [:msisdn] => 0723863153
+    [:ussdCode] => 21211*text=1
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-07-24 22:20:08
+    [:userParams] => USER_ID=1*
+)
+[ERROR : 2022-07-24 22:20:18] query 
+Params=UssdSession Object
+(
+    [sessionId] => 12313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211*text=1*1
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:19] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '12313' for key 'PRIMARY' in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 12313
+    [:msisdn] => 0723863153
+    [:ussdCode] => 21211*text=1*1
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-07-24 22:20:18
+    [:userParams] => USER_ID=1*
+)
+[ERROR : 2022-07-24 22:20:27] query 
+Params=UssdSession Object
+(
+    [sessionId] => 11313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211*text=1*1
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:31] query 
+Params=UssdSession Object
+(
+    [sessionId] => 11313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:31] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '11313' for key 'PRIMARY' in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 11313
+    [:msisdn] => 0723863153
+    [:ussdCode] => 21211
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-07-24 22:20:31
+    [:userParams] => USER_ID=1*
+)
+[ERROR : 2022-07-24 22:20:40] query 
+Params=UssdSession Object
+(
+    [sessionId] => 11313
+    [msisdn] => 0723863153
+    [ussdCode] => 21211*1
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-07-24 22:20:40] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '11313' for key 'PRIMARY' in C:\wamp64\www\art_ussd\QueryManager.php:48
+Stack trace:
+#0 C:\wamp64\www\art_ussd\QueryManager.php(48): PDOStatement->execute(Array)
+#1 C:\wamp64\www\art_ussd\QueryManager.php(73): _execute('INSERT INTO uss...', Array)
+#2 C:\wamp64\www\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 11313
+    [:msisdn] => 0723863153
+    [:ussdCode] => 21211*1
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-07-24 22:20:40
+    [:userParams] => USER_ID=1*
+)
