@@ -123,4 +123,3 @@ function isValidIdMFLCode($mflCode) {
         return true;
     }
 }
-

@@ -55,6 +55,21 @@ class UssdSession {
     const IDNUMBER = "IDNUMBER";
     const PIN_ID = "PIN_ID";
     const MFL_CODE_REQUEST_ID = "MFL_CODE_REQUEST_ID";
+    const PROVIDER_ACCESS_ID = "PROVIDER_ACCESS_ID";
+    const UNIQUE_PATIENT_ID_NUMBER_ID = "UNIQUE_PATIENT_ID_NUMBER_ID";
+    const DIRECTORY_SERVICE_ID = "DIRECTORY_SERVICE_ID";
+    const MEDICATION_DELIVERY_ID = "MEDICATION_DELIVERY_ID";
+    const DELIVERY_LOCATION_ID = "DELIVERY_LOCATION_ID";
+    const DELIVERY_COUNTY_LOCATION_ID = "DELIVERY_COUNTY_LOCATION_ID";
+    const CONFIRM_MEDICATION_DELIVERY_ID = "CONFIRM_MEDICATION_DELIVERY_ID"; 
+    const RIDERS_CODE_ID = "RIDERS_CODE_ID"; 
+
+    
+
+
+    
+
+    
 
  
     
@@ -79,9 +94,16 @@ class OptionType {
         var $type_desc;
 }
 
+class RegimenType {
+    var $regimen_id;
+    var $regimen_desc;
+}
+
+
 class UssdUser {
-    var $id;
+    var $user_id;
     var $msisdn;
+    var $mfl_code;
     var $firstName;
     var $lastName;
     var $idNumber;
@@ -92,10 +114,10 @@ class UssdUser {
 class UssdFacility {
     var $id;
     var $msisdn;
-    var $facilityName;
+    var $name;
     var $phoneNumber;
-    var $mflCode;
-    var $dateCreated;
+    var $code;
+    var $ContactDetails;
     var $daysOfAppointment;
     var $currentRegime;
     var $pin;
@@ -106,3 +128,11 @@ class UssdFacility {
 
 }
 
+class FacilityQuery {
+    var $initiator_id;
+    var $facility_mfl;
+    var $facility_name;
+    var $phone_no;
+    var $pin;
+
+}

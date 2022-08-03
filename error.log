@@ -1,0 +1,615 @@
+[ERROR : 2022-08-03 16:22:24] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011231
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:00:03] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011233
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:02:19] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011234
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:03:03] _select error: PDOException: SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(299): _select('SELECT tbl_loca...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location  INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code`  INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id  WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0) AND tbl_location_details.location_type=1
+Params=Array
+(
+    [:ccc_no] => 1234567890
+)
+[ERROR : 2022-08-03 17:03:03] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 
+    [:acceptance_date] => 2022-08-03 17:03:03
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 
+)
+[ERROR : 2022-08-03 17:06:32] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011235
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:07:36] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011236
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:07:57] _select error: PDOException: SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(299): _select('SELECT tbl_loca...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location  INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code`  INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id  WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0) AND tbl_location_details.location_type=1
+Params=Array
+(
+    [:ccc_no] => 1234567890
+)
+[ERROR : 2022-08-03 17:07:57] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 
+    [:acceptance_date] => 2022-08-03 17:07:57
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 
+)
+[ERROR : 2022-08-03 17:08:32] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011237
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:08:53] _select error: PDOException: SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(299): _select('SELECT tbl_loca...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location  INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code`  INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id  WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0) AND tbl_location_details.location_type=1
+Params=Array
+(
+    [:ccc_no] => 1234567890
+)
+[ERROR : 2022-08-03 17:08:53] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(137): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 1
+    [:acceptance_date] => 2022-08-03 17:08:53
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 13023
+)
+[ERROR : 2022-08-03 17:15:02] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011238
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:15:43] _select error: PDOException: SQLSTATE[21000]: Cardinality violation: 1242 Subquery returns more than 1 row in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(299): _select('SELECT tbl_loca...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(136): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location  INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code`  INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id  WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0) AND tbl_location_details.location_type=1
+Params=Array
+(
+    [:ccc_no] => 1234567890
+)
+[ERROR : 2022-08-03 17:15:43] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(136): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 1
+    [:acceptance_date] => 2022-08-03 17:15:43
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 13023
+)
+[ERROR : 2022-08-03 17:23:35] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011239
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:23:57] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(136): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 1
+    [:acceptance_date] => 2022-08-03 17:23:57
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 13023
+)
+[ERROR : 2022-08-03 17:25:22] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011240
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:25:45] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(136): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 1
+    [:acceptance_date] => 2022-08-03 17:25:45
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 13023
+)
+[ERROR : 2022-08-03 17:47:45] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011241
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:52:44] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011242
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:54:09] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011243
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:55:04] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011244
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 17:56:22] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011245
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:01:53] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011246
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:03:27] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011247
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:06:33] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011248
+    [msisdn] => 254723863153
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=1*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:07:03] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011248
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:07:03] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '10011248' for key 'ussd_sessions.PRIMARY' in C:\xampp\htdocs\art_ussd\QueryManager.php:41
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(41): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(66): _execute('INSERT INTO uss...', Array)
+#2 C:\xampp\htdocs\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 10011248
+    [:msisdn] => 254718373569
+    [:ussdCode] => 119
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-08-03 18:07:03
+    [:userParams] => USER_ID=4*
+)
+[ERROR : 2022-08-03 18:07:30] _select error: PDOException: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens in C:\xampp\htdocs\art_ussd\QueryManager.php:20
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(20): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(309): _select('UPDATE tbl_reff...', Array)
+#2 C:\xampp\htdocs\art_ussd\classes\ReferralServicesAction.php(136): saveAcceptRef(Object(UssdSession), '1234567890')
+#3 C:\xampp\htdocs\art_ussd\index.php(107): ReferralServicesAction->process(Object(UssdSession))
+#4 {main}
+SQL=UPDATE tbl_refferal SET acceptor_id, acceptance_date,  r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;
+Params=Array
+(
+    [:acceptor_id] => 1
+    [:acceptance_date] => 2022-08-03 18:07:30
+    [:ccc_no] => 1234567890
+    [:mfl_code] => 13023
+)
+[ERROR : 2022-08-03 18:08:40] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011249
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:12:39] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011250
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:14:51] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011251
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:15:04] query 
+Params=UssdSession Object
+(
+    [sessionId] => 10011251
+    [msisdn] => 254718373569
+    [ussdCode] => 119
+    [ussdString] => 
+    [ussdStringPrefix] => 
+    [ussdProcessString] => 
+    [previousFeedbackType] => 
+    [currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [currentFeedbackType] => MAINMENU_REQ
+    [startTime] => 
+    [userParams] => USER_ID=4*
+    [test] => 
+)
+[ERROR : 2022-08-03 18:15:04] _execute error: PDOException: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '10011251' for key 'ussd_sessions.PRIMARY' in C:\xampp\htdocs\art_ussd\QueryManager.php:41
+Stack trace:
+#0 C:\xampp\htdocs\art_ussd\QueryManager.php(41): PDOStatement->execute(Array)
+#1 C:\xampp\htdocs\art_ussd\QueryManager.php(66): _execute('INSERT INTO uss...', Array)
+#2 C:\xampp\htdocs\art_ussd\index.php(40): createNewUssdSession(Object(UssdSession))
+#3 {main}
+SQL=INSERT INTO ussd_sessions (sessionId,msisdn,UssdCode,UssdString,UssdProcessString,currentFeedbackString,currentFeedbackType,startTime,userParams) VALUES(:sessionId,:msisdn,:ussdCode,:ussdString,:ussdProcessString,:currentFeedbackString,:currentFeedbackType,:startTime,:userParams)
+Params=Array
+(
+    [:sessionId] => 10011251
+    [:msisdn] => 254718373569
+    [:ussdCode] => 119
+    [:ussdString] => 
+    [:ussdProcessString] => 
+    [:currentFeedbackString] => CON Select one:
+1: Facility Directory
+2: Referral Services
+3: Generate Secret pin
+    [:currentFeedbackType] => MAINMENU_REQ
+    [:startTime] => 2022-08-03 18:15:04
+    [:userParams] => USER_ID=4*
+)

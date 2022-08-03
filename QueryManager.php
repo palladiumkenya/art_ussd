@@ -1,12 +1,15 @@
 <?php
 include_once('Models.php');
-
+include_once('./classes/DotEnv.php');
+use DevEnvReader\DotEnv;
+(new DotEnv(__DIR__ . '/.env'))->load();
 function _select($sql, $params) {
 
-    $username = 'root';
-    $password = '1234';
-    $database = 'art_ussd';
-    $host = 'localhost';
+$username =$_ENV['DB_USERNAME'];
+    $password =$_ENV['DB_PASSWORD'];
+    $database =$_ENV['DB_DATABASE'];
+    $host =$_ENV['DB_HOST'];
+   // $port=$_ENV['DB_PORT'];
   
 
     $res = array();
@@ -16,10 +19,7 @@ function _select($sql, $params) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $res = $stmt->fetchAll();
-    } catch (PDOException $error) {
-       // var_dump($sql);
-       // var_dump($params);
-       // var_dump($error);        
+    } catch (PDOException $error) {        
        error_log("[ERROR : " . date("Y-m-d H:i:s") . "] _select error: " . $error . "\nSQL=" . $sql . "\nParams=" . print_r($params, true), 3, LOG_FILE);
     }
     return $res;
@@ -28,10 +28,11 @@ function _select($sql, $params) {
  * Performs database insert, update and delete
  */
 function _execute($sql, $params) {
-    $username = 'root';
-    $password = '1234';
-    $database = 'art_ussd';
-    $host = 'localhost';
+    $username =$_ENV['DB_USERNAME'];
+    $password =$_ENV['DB_PASSWORD'];
+    $database =$_ENV['DB_DATABASE'];
+    $host =$_ENV['DB_HOST'];
+ 
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
@@ -115,6 +116,7 @@ function getClinicTypeCode() {
     $params = array(
     );
     $resultset = _select($sql, $params);
+
     foreach ($resultset as $record) {
         $clinicType = new ClinicType();
         $clinicType->type_id = $record['type_id'];
@@ -140,6 +142,21 @@ function getOptionType() {
     return $optionTypeList;
 }
 
+function getRegimentType() {
+    $optionTypeList = array();
+    $sql = "SELECT  regimen_id, regimen_desc FROM tbl_regimen";
+           
+    $params = array(
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $optionType = new RegimenType();
+        $optionType->regimen_id = $record['regimen_id'];
+        $optionType->regimen_desc = $record['regimen_desc'];
+        $optionTypeList[] = $optionType;
+    }
+    return $optionTypeList;
+}
 
 
 function mflCodeSend($ussdUser) {
@@ -151,7 +168,14 @@ function mflCodeSend($ussdUser) {
     );
     return _execute($sql, $params);
 }
-function facilityNameSearch($ussdUser) {
+
+
+
+
+
+
+
+function facilityNameInsert($ussdUser) {
     $sql = "INSERT INTO tbl_facility (msisdn,facilityName)"
             . " VALUES(:msisdn,:facilityName)";
     $params = array(
@@ -161,35 +185,74 @@ function facilityNameSearch($ussdUser) {
     return _execute($sql, $params);
 }
 
-function updateFacility($ussdUser) {
-        $sql = "UPDATE tbl_facility SET clinicalType=:clinicalType,phoneNumber=:phoneNumber
-        WHERE msisdn=:msisdn";
+
+function updateFacility($ussdUser,$phoneNumber, $clinicType) {
+  $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+    
+        ':msisdn' => $ussdUser->msisdn
+    );
+    $user_details= _select($sql1, $params2);
+
+  //  echo $clinicType; exit();
+
+    //
+
+
+      $sql3 = "SELECT tbl_location_details.telephone, tbl_clinictypes.type_desc  FROM tbl_location "
+      . " INNER JOIN tbl_location_details ON tbl_location.location_id=tbl_location_details.location_id "
+. " INNER JOIN tbl_clinictypes ON tbl_clinictypes.type_id=tbl_location_details.location_type WHERE tbl_location.mfl_code=:mfl_code AND "
+. " tbl_location_details.location_type=:location_type";
+              $params3 = array(
+    
+        ':mfl_code' => $user_details[0]['mfl_code'],
+        ':location_type' => $clinicType
+    );
+    $location_details= _select($sql3, $params3);
+
+    //print_r( $location_details); exit();
+
+
+      $sql = "UPDATE tbl_location_details AS b"
+            ." INNER JOIN tbl_location AS g ON b.location_id = g.location_id"
+            . " SET b.telephone = :telephone"
+            . " WHERE  g.mfl_code=:mfl_code AND b.location_type =:location_type";
+
+        // $sql = "UPDATE tbl_facility SET clinicalType=:clinicalType,phoneNumber=:phoneNumber
+        // WHERE msisdn=:msisdn";
         $params = array(
-            ':clinicalType' => $ussdUser->clinicalType,
-            ':phoneNumber' => $ussdUser->phoneNumber,
-            ':msisdn' => $ussdUser->msisdn,
+            ':location_type' => $clinicType,
+            ':telephone' => $phoneNumber,
+            ':mfl_code' => $user_details[0]['mfl_code'],
         );
-        return _execute($sql, $params);
+         _execute($sql, $params);
+
+         return $location_details;
+
+        //
+
+
 }
 
 
 function getUssdUserList($msisdn) {
     $ussdUserList = array();
-    $sql = "SELECT id,msisdn,firstName,lastName,idNumber,dateCreated"
-            . " FROM ussd_users"
-            . " WHERE msisdn=:msisdn LIMIT 1";
+    $sql = "SELECT  tbl_user.user_id, tbl_provider.msisdn, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
     $params = array(
         ':msisdn' => $msisdn,
     );
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
         $ussdUser = new UssdUser();
-        $ussdUser->id = $record['id'];
+        $ussdUser->user_id = $record['user_id'];
         $ussdUser->msisdn = $record['msisdn'];
-        $ussdUser->firstName = $record['firstName'];
-        $ussdUser->lastName = $record['lastName'];
-        $ussdUser->idNumber = $record['idNumber'];
-        $ussdUser->dateCreated = $record['dateCreated'];
+        $ussdUser->mfl_code = $record['mfl_code'];
         $ussdUserList[] = $ussdUser;
     }
     return $ussdUserList;
@@ -209,17 +272,45 @@ function createUssdUser($ussdUser) {
 }
 
 
-function saveAcceptRef($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (cccNumber,optionType)"
-            . " VALUES(:cccNumber,:optionType)";
-    $params = array(
-        ':cccNumber' => $ussdUser->cccNumber,
-        ':optionType' => $ussdUser->optionType,
 
+
+
+function saveAcceptRef($ussdUser, $ccc_no) {
+
+     $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
+//print_r( $user_details); exit();
+ 
+     $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
+          
+            ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+            ." WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 LIMIT 1) AND tbl_location_details.location_type=1";
+              $params3 = array(
+    
+        ':ccc_no' => $ccc_no
     );
-    return _execute($sql, $params);
-}
+    $reffering_location_details= _select($sql3, $params3);
 
+    $sql = "UPDATE tbl_refferal SET acceptor_id, acceptance_date, "
+           . " r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;";
+        $params = array(
+        ':acceptor_id' =>  $user_details[0]['user_id'],
+        ':acceptance_date' => date('Y-m-d H:i:s'),
+        ':ccc_no' =>  $ccc_no,
+        ':mfl_code' =>  $user_details[0]['mfl_code'],
+        );
+        _select($sql, $params);
+
+        return $reffering_location_details;
+       
+}
 
 
 function secretPin($ussdUser) {
@@ -234,17 +325,185 @@ function secretPin($ussdUser) {
     return _execute($sql, $params);
 }
 
-function transit($ussdUser) {
-    $sql = "INSERT INTO tbl_facility (cccNumber,numberOfDrugs,msisdn)"
-            . " VALUES(:cccNumber,:numberOfDrugs,:msisdn)";
-    $params = array(
-        ':cccNumber' => $ussdUser->cccNumber,
-        ':numberOfDrugs' => $ussdUser->numberOfDrugs,
-        ':msisdn' => $ussdUser->msisdn,
 
+
+
+
+function initiate_referals_details($ussdUser,$ccc_number, $number_days) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
+
+
+      $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
+             ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+            ." WHERE tbl_location.mfl_code=:mfl_code AND tbl_location_details.location_type=1";
+              $params3 = array(
+    
+        ':mfl_code' => $user_details[0]['mfl_code'],
     );
-    return _execute($sql, $params);
+    $provider_location_details= _select($sql3, $params3);
+
+   // print_r($provider_location_details); exit();
+
+     
+
+         return $provider_location_details;
 }
+
+
+function get_provider_location_details($ussdUser,$ccc_number, $number_days) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
+
+
+      $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
+             ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+            ." WHERE tbl_location.mfl_code=:mfl_code AND tbl_location_details.location_type=1";
+              $params3 = array(
+    
+        ':mfl_code' => $user_details[0]['mfl_code'],
+    );
+    $provider_location_details= _select($sql3, $params3);
+
+   // print_r($provider_location_details); exit();
+
+     
+
+         return $provider_location_details;
+}
+
+
+
+function checkCccNumber($ccc_no) {
+    $ussdUserList = array();
+    $sql = "SELECT * FROM tbl_patient WHERE ccc_no=:ccc_no and is_active=1";
+    $params = array(
+        ':ccc_no' => $ccc_no,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $ussdUser = new UssdFacility();
+        $ussdUser->ccc_no = $record['ccc_no'];
+        $ussdUserList[] = $ussdUser;
+    }
+    return $ussdUserList;
+}
+
+
+function checkMflCode($code) {
+    $ussdUserList = array();
+    $sql = "SELECT * FROM tbl_master_facility INNER JOIN tbl_location ON tbl_location.mfl_code=tbl_master_facility.`code`" 
+           . " WHERE tbl_location.mfl_code = :code LIMIT 1 ";
+    $params = array(
+        ':code' => $code,
+    );
+    $resultset = _select($sql, $params);
+    foreach ($resultset as $record) {
+        $ussdUser = new UssdFacility();
+        $ussdUser->code = $record['code'];
+        $ussdUserList[] = $ussdUser;
+    }
+    return $ussdUserList;
+}
+  
+function initiate_referal($ussdUser,$ccc_number, $mflCode,$apptDate, $regiment) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
+
+
+      $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
+          
+            ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+            ." WHERE tbl_location.mfl_code=:mfl_code AND tbl_location_details.location_type=1";
+              $params3 = array(
+    
+        ':mfl_code' => $mflCode
+    );
+    $reffered_location_details= _select($sql3, $params3);
+  //  print_r($reffered_location_details); exit();
+
+      $sql = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,reffered_mfl_code ,appointment_date"
+             ." ,current_regimen , initiator_mfl_code) "
+             ." VALUES ( ccc_no, referral_type, initiation_date, initiator_id, reffered_mfl_code,- appointment_date,  current_regimen, initiator_mfl_code
+)";
+
+
+
+        $params = array(
+            ':ccc_no' => $ccc_number,
+            ':referral_type' => 'Normal',
+            ':initiation_date' => date("Y-m-d h:i:sa"),
+            ':initiator_id' => $user_details[0]['user_id'],
+            ':initiator_mfl_code' => $mflCode,
+            ': appointment_date' => $apptDate,
+            ': current_regimen' => $regiment,
+            // ':drug_days' => $number_days,
+        );
+         _execute($sql, $params);
+
+         return $reffered_location_details;
+}
+
+
+function transit($ussdUser,$ccc_number, $number_days) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
+
+
+      $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_patient "
+            ." INNER JOIN  tbl_location ON tbl_patient.mfl_code=tbl_location.mfl_code"
+            ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+            ." WHERE tbl_patient.ccc_no=:ccc_no AND tbl_location_details.location_type=1";
+              $params3 = array(
+    
+        ':ccc_no' => $ccc_number
+    );
+    $patient_location_details= _select($sql3, $params3);
+
+      $sql = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,initiator_mfl_code, drug_days
+) VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :initiator_mfl_code,  :drug_days
+)";
+        $params = array(
+            ':ccc_no' => $ccc_number,
+            ':referral_type' => 'Transit',
+            ':initiation_date' => date("Y-m-d h:i:sa"),
+             ':initiator_id' => $user_details[0]['user_id'],
+              ':initiator_mfl_code' => $user_details[0]['mfl_code'],
+               ':drug_days' => $number_days,
+        );
+         _execute($sql, $params);
+
+         return $patient_location_details;
+}
+
 
 
 function initialReference($ussdUser) {
@@ -260,25 +519,28 @@ function initialReference($ussdUser) {
     return _execute($sql, $params);
 }
 
+
+
 function generatePin($ussdUser) {
     $pin = rand(1000,9999);
-    $sql = "INSERT INTO tbl_facility (msisdn,pin)"
-            . " VALUES(:msisdn,:pin)";
-    $params = array(
-        'msisdn' => $ussdUser->msisdn,
+    //print_r($ussdUser); exit();
+    $sql = "UPDATE tbl_provider SET pin=:pin"
+       . " WHERE msisdn=:msisdn";
+        $params = array(
+        ':msisdn' => $ussdUser,
         ':pin' => $pin,
-
-    );
-    return _execute($sql, $params);
+        );
+     //  return _select($sql, $params);
+        if(_execute($sql, $params))
+            {
+                return $pin;
+            };
 }
+
 
 function getDateCreated($msisdn) {
     $ratesList = array();
-     $sql = "SELECT created_date, msisdn,pin"
-            . " FROM tbl_facility"
-            . " WHERE msisdn=:msisdn"
-            . "  order by pin DESC"
-            . "  LIMIT 1";
+     $sql = "SELECT msisdn, pin, pin_generation_date FROM tbl_provider WHERE  msisdn=:msisdn";
     $params = array(
         ':msisdn' => $msisdn,
     );
@@ -287,135 +549,161 @@ function getDateCreated($msisdn) {
         $rate = new UssdFacility();
         $rate->msisdn = $record['msisdn'];
          $rate->pin = $record['pin'];
-        $rate->created_date = $record['created_date'];
+        $rate->created_date = $record['pin_generation_date'];
         $ratesList[] = $rate;
     }
     return $ratesList;
 }
 
-function searchMfl($mflCode) {
+
+function searchMfl($facilityName) {
     $mflList = array();
-    $sql = "SELECT mflCode,created_date, msisdn"
-            . " FROM tbl_facility"
-            . " WHERE mflCode LIKE '%$mflCode'"
-            . "  order by id DESC"
-            . " LIMIT 1";
+    $sql = "SELECT tbl_master_facility.`name`,tbl_master_facility.`code` , GROUP_CONCAT(' ',tbl_clinictypes.type_desc,': ', "
+    ."tbl_location_details.telephone) as ContactDetails"
+     . " FROM "
+    . " tbl_location"
+    ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code = tbl_master_facility.`code`"
+    ." INNER JOIN tbl_location_details ON tbl_location_details.location_id = tbl_location.location_id"
+    ." INNER JOIN tbl_clinictypes ON tbl_clinictypes.type_id=tbl_location_details.location_type"
+     ." WHERE tbl_master_facility.`code` LIKE '%$facilityName%'"
+    ." GROUP BY    tbl_master_facility.`name`,tbl_master_facility.`code`"
+    ." LIMIT 5;";
     $params = array(
-        ':mflCode' => $mflCode,
+        ':name' => $facilityName,
     );
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
         $mflCategory = new UssdFacility();
 
-        $mflCategory->mflCode = $record['mflCode'];
-         $mflCategory->msisdn = $record['msisdn'];
-         $mflCategory->created_date = $record['created_date'];
+        $mflCategory->code = $record['code'];
+        $mflCategory->name = $record['name'];
+        $mflCategory->ContactDetails = $record['ContactDetails'];
+  
         $mflList[] = $mflCategory;
     }
     return $mflList;
 }
 
-function getPin($msisdn) {
-    $ratesList = array();
-     $sql = "SELECT pin"
-            . " FROM tbl_facility"
-            . " WHERE msisdn=:msisdn"
-            . " AND pin is not null"
-            . "  order by id DESC"
-            . "  LIMIT 1";
-    $params = array(
-        ':msisdn' => $msisdn,
-    );
-    $resultset = _select($sql, $params);
-    foreach ($resultset as $record) {
-        $rate = new UssdFacility();
-        $rate->pin = $record['pin'];
-        $ratesList[] = $rate;
-    }
-    return $ratesList;
-}
+
+
 function searchFacilityName($facilityName) {
     $mflList = array();
-     $sql = "SELECT rv.facilityName,rv.created_date,rv.mflCode, rv.cccNumber,rv.pin,r.type_desc, rv.msisdn,rv.upn,rv.currentRegime"
-            . " FROM tbl_facility rv"
-            . " LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
-            . " WHERE facilityName LIKE '%$facilityName'"
-            . "  order by id DESC"
-            . " LIMIT 1";
+    $sql = "SELECT tbl_master_facility.`name`,tbl_master_facility.`code` , GROUP_CONCAT(' ',tbl_clinictypes.type_desc,': ', "
+    ."tbl_location_details.telephone) as ContactDetails"
+     . " FROM "
+    . " tbl_location"
+    ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code = tbl_master_facility.`code`"
+    ." INNER JOIN tbl_location_details ON tbl_location_details.location_id = tbl_location.location_id"
+    ." INNER JOIN tbl_clinictypes ON tbl_clinictypes.type_id=tbl_location_details.location_type"
+     ." WHERE tbl_master_facility.`name` LIKE '%$facilityName%'"
+    ." GROUP BY    tbl_master_facility.`name`,tbl_master_facility.`code`"
+    ." LIMIT 5;";
     $params = array(
-        ':facilityName' => $facilityName,
+        ':name' => $facilityName,
     );
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
         $mflCategory = new UssdFacility();
 
-        $mflCategory->cccNumber = $record['cccNumber'];
-        $mflCategory->pin = $record['pin'];
-        $mflCategory->facilityName = $record['facilityName'];
-        $mflCategory->type_desc = $record['type_desc'];
-        $mflCategory->mflCode = $record['mflCode'];
-        $mflCategory->currentRegime = $record['currentRegime'];    
-        $mflCategory->upn = $record['upn'];
-        $mflCategory->msisdn = $record['msisdn'];
-        $mflCategory->created_date = $record['created_date'];
+        $mflCategory->code = $record['code'];
+        $mflCategory->name = $record['name'];
+        $mflCategory->ContactDetails = $record['ContactDetails'];
+  
         $mflList[] = $mflCategory;
     }
     return $mflList;
 }
+
+
+
 
 
 function searchPatientDetails($cccNumber) {
     $mflList = array();
-     $sql = "SELECT rv.facilityName,rv.created_date,rv.mflCode, rv.cccNumber,rv.pin,r.type_desc, rv.msisdn,rv.upn,rv.currentRegime"
-            . " FROM tbl_facility rv"
-            . " LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
-            . " WHERE cccNumber LIKE '%$cccNumber'"
-            . "  order by id DESC"
-            . " LIMIT 1";
+     $sql = " SELECT  firstname, lastname, date_of_birth, ccc_no,  art_start_date, viral_load, regimen, tca, mfl_code FROM tbl_patient"
+         ." INNER JOIN tbl_person ON tbl_patient.patient_id=tbl_person.person_id "
+         ." WHERE ccc_no=:cccNumber";
     $params = array(
         ':cccNumber' => $cccNumber,
     );
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
         $mflCategory = new UssdFacility();
-
-        $mflCategory->cccNumber = $record['cccNumber'];
-        $mflCategory->pin = $record['pin'];
-        $mflCategory->facilityName = $record['facilityName'];
-        $mflCategory->type_desc = $record['type_desc'];
-        $mflCategory->mflCode = $record['mflCode'];
-        $mflCategory->currentRegime = $record['currentRegime'];    
-        $mflCategory->upn = $record['upn'];
-        $mflCategory->msisdn = $record['msisdn'];
-        $mflCategory->created_date = $record['created_date'];
+        $mflCategory->firstname = $record['firstname'];
+        $mflCategory->lastname = $record['lastname'];
+        $mflCategory->date_of_birth = $record['date_of_birth'];
+        $mflCategory->ccc_no = $record['ccc_no'];
+        $mflCategory->art_start_date = $record['art_start_date'];
+        $mflCategory->viral_load = $record['viral_load'];    
+        $mflCategory->regimen = $record['regimen'];
+        $mflCategory->tca = $record['tca'];
+        $mflCategory->mfl_code = $record['mfl_code'];
         $mflList[] = $mflCategory;
     }
     return $mflList;
 }
 
 
-// function searchPatientDetails($cccNumber) {
-//     $mflList = array();
-//     $sql = "SELECT rv.facilityName,rv.created_date, rv.cccNumber,rv.pin,r.type_desc"
-//             . " FROM tbl_facility rv"
-//             . "LEFT JOIN tbl_clinictypes r ON rv.clinicalType=r.type_id"
-//             . " WHERE cccNumber LIKE '%$cccNumber'"
-//             . " AND pin is not null"
-//             . "  order by id DESC"
-//             . " LIMIT 1";
-//     $params = array(
-//          ':cccNumber' => $cccNumber,
-//         //':pin' => $pin,
-       
-//     );
-//     $resultset = _select($sql, $params);
-//     foreach ($resultset as $record) {
-//         $patientSearchCategory = new UssdFacility();
-//         $patientSearchCategory->pin = $record['pin'];
-//         $patientSearchCategory->cccNumber = $record['cccNumber'];
-//         $patientSearchCategory->type_desc = $record['type_desc'];
-//         $patientSearchCategory->created_date = $record['created_date'];
-//         $searchList[] = $patientSearchCategory;
-//     }
-//     return $searchList;
-// }
+function facilityQuerriesLogName($ussdUser,$facilityName) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+    
+        ':msisdn' => $ussdUser->msisdn
+    );
+    $user_details= _select($sql1, $params2);
+    $sql = "INSERT INTO  tbl_facility_queries (initiator_id ,initiator_mflcode ,query_param ,phone_no) "
+          . " VALUES(:initiator_id,:facility_mfl,:facility_name,:phone_no)";
+    $params = array(
+        ':initiator_id' => $user_details[0]['user_id'],
+        ':facility_mfl' => $user_details[0]['mfl_code'],
+        ':facility_name' => $facilityName,
+        ':phone_no' => $ussdUser->msisdn,
+    );
+    return _execute($sql, $params);
+}
+
+function mflQuerriesLogName($ussdUser,$facilityName) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+    
+        ':msisdn' => $ussdUser->msisdn
+    );
+    $user_details= _select($sql1, $params2);
+    $sql = "INSERT INTO  tbl_facility_queries (initiator_id ,initiator_mflcode ,query_param ,phone_no) "
+          . " VALUES(:initiator_id,:facility_mfl,:facility_name,:phone_no)";
+    $params = array(
+        ':initiator_id' => $user_details[0]['user_id'],
+        ':facility_mfl' => $user_details[0]['mfl_code'],
+        ':facility_name' => $facilityName,
+        ':phone_no' => $ussdUser->msisdn,
+    );
+    return _execute($sql, $params);
+}
+
+function updateContactLog($ussdUser,$phoneNumber, $clinicType) {
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+    
+        ':msisdn' => $ussdUser->msisdn
+    );
+    $user_details= _select($sql1, $params2);
+    $sql = "INSERT INTO  tbl_facility_queries (initiator_id ,initiator_mflcode ,updated_phone ,clinic_type, phone_no) "
+          . " VALUES(:initiator_id,:facility_mfl,:updated_phone ,:clinic_type,:phone_no)";
+    $params = array(
+        ':initiator_id' => $user_details[0]['user_id'],
+         ':facility_mfl' => $user_details[0]['mfl_code'],
+        ':updated_phone' =>$phoneNumber,
+        ':clinic_type'=>$clinicType,
+        ':phone_no' => $ussdUser->msisdn,
+    );
+    return _execute($sql, $params);
+}

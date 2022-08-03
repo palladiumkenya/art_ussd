@@ -8,17 +8,17 @@ class RootMenuAction {
         $ussdUserList = getUssdUserList($ussdSession->msisdn);
         if(count($ussdUserList)>0){
             $menuItems = new MenuItems();
-            $userParams = UssdSession::USER_ID . "=" . $ussdUserList[0]->id . "*" ;
+            $userParams = UssdSession::USER_ID . "=" . $ussdUserList[0]->user_id. "*" ;
             $ussdSession->userParams = $userParams;
             $ussdSession = $menuItems->setMainMenu($ussdSession);
             $reply = "CON " . $ussdSession->currentFeedbackString;
             $ussdSession->currentFeedbackString = $reply;
         } else {
-                $registration = new RegistrationAction();
-            $ussdSession = $registration->process($ussdSession);
-            // $ussdSession = new UssdSession();
-            // $reply = "END Your are not Registered to this USSD Platform.";
-            // $ussdSession->currentFeedbackString = $reply;
+            //$registration = new RegistrationAction();
+           // $ussdSession = $registration->process($ussdSession);
+             $ussdSession = new UssdSession();
+             $reply = "END Your are not Registered to this USSD Platform.";
+             $ussdSession->currentFeedbackString = $reply;
         }
         return $ussdSession;
     }

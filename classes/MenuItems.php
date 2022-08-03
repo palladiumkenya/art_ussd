@@ -2,7 +2,7 @@
 
 include_once('UssdUtils.php');
 include_once('./QueryManager.php');
-
+include_once('sms_gateway.php');
 class MenuItems {
 	const MYACCOUNT_CATEGORY_REQ = "MYACCOUNT_CATEGORY_REQ";
 	const MAINMENU_REQ = "MAINMENU_REQ";
@@ -40,6 +40,21 @@ class MenuItems {
     const MFL_CODE_REQUEST = "MFL_CODE_REQUEST";
     const PATIENT_DETAILS_SEARCH_REQUEST = "PATIENT_DETAILS_SEARCH_REQUEST";
     const TRANSIT_SEARCH_REQUEST = "TRANSIT_SEARCH_REQUEST";
+    const CLIENT_ACCESS_REQ = "CLIENT_ACCESS_REQ";
+    const PROVIDER_ACCESS_REQ = "PROVIDER_ACCESS_REQ";
+    const UNIQUE_PATIENT_ID_NUMBER_REQ = "UNIQUE_PATIENT_ID_NUMBER_REQ";
+    const DIRECTORY_SERVICE_REQ = "DIRECTORY_SERVICE_REQ";   
+    const MEDICATION_DELIVERY_REQ = "MEDICATION_DELIVERY_REQ";  
+    const DELIVERY_COUNTY_LOCATION_REQ = "DELIVERY_COUNTY_LOCATION_REQ";      
+    const DELIVERY_LOCATION_REQ = "DELIVERY_LOCATION_REQ"; 
+    const CONFIRM_MEDICATION_DELIVERY_REQ = "CONFIRM_MEDICATION_DELIVERY_REQ"; 
+    const RIDERS_CODE_REQ = "RIDERS_CODE_REQ"; 
+
+    
+
+
+
+
 
 	var $reply;
     var $userParams;
@@ -64,7 +79,7 @@ class MenuItems {
         return $ussdSession;
     }
 
-     public function setMainMenu($ussdSession) {
+    public function setMainMenu($ussdSession) {
         $userId = UssdSession::getUserParam(UssdSession::USER_ID, $ussdSession->userParams);
 
         $userParams = UssdSession::USER_ID . "=" . $userId . "*";
@@ -74,6 +89,26 @@ class MenuItems {
         $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
 //        }
         $ussdSession->currentFeedbackType = self::MAINMENU_REQ;
+        return $ussdSession;
+    }
+
+//     public function setMainMenu($ussdSession) {
+//         $userId = UssdSession::getUserParam(UssdSession::USER_ID, $ussdSession->userParams);
+
+//         $userParams = UssdSession::USER_ID . "=" . $userId . "*";
+//         $ussdSession->userParams = $userParams;
+
+//         $menuArray = array("Client Access", "Provider Access");
+//         $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
+// //        }
+//         $ussdSession->currentFeedbackType = self::MAINMENU_REQ;
+//         return $ussdSession;
+//     }
+
+    public function setProvider($ussdSession) {
+        $menuArray = array("Facility Directory", "Referral Services", "Generate Secret pin");
+        $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
+        $ussdSession->currentFeedbackType = self::PROVIDER_ACCESS_REQ;
         return $ussdSession;
     }
     public function setFacilityDirectoryRequest($ussdSession) {
@@ -128,16 +163,19 @@ class MenuItems {
         $reply = "Select Clinic Type:";
         if (count($clinicTypeList) > 0) {
             $displayedClinicTypeList = "";
-            for ($i = 1; $i <= count($clinicTypeList); $i++) {
-                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
-                if ($i != count($clinicTypeList)) {
-                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
-                } else {
-                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
-                }
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {              
+                 $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                 if ($i != count($clinicTypeList)) {
+                     
+                     $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_desc . "#";
+                   
+                 } else {
+                     $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_desc;
+                 }
             }
-            $userParams = $ussdSession->userParams . UssdSession::CLINIC_TYPE_ID . "=" . $displayedClinicTypeList . "*";
-            $ussdSession->userParams = $userParams;
+        $userParams = $ussdSession->userParams . UssdSession::CLINIC_TYPE_ID . "=" . $displayedClinicTypeList . "*";
+        $ussdSession->userParams = $userParams;
+
         } else {
             $reply = "\nNo Clinic Type was found.";
         }
@@ -221,21 +259,32 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::APPOINTMENT_DATE_REQ;
         return $ussdSession;
     }
-    public function setCurrentRegimentRequest($ussdSession) {
-        $ussdSession->currentFeedbackString = "Enter Current Regimen:";
+ 
+
+        public function setCurrentRegimentRequest($ussdSession) {
+        $clinicTypeList = getRegimentType();
+        $reply = "Select Options:";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->regimen_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->regimen_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->regimen_id;
+                }
+            }
+            $userParams = $ussdSession->userParams . UssdSession::CURRENT_REGIMEN_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply = "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
         $ussdSession->currentFeedbackType = self::CURRENT_REGIMEN_REQ;
         return $ussdSession;
-    }
-    // public function setSecretPinRequest($ussdSession) {
-    //     $ussdSession->currentFeedbackString = "Enter Pin:";
-    //     $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
-    //     return $ussdSession;
-    // }
-    public function setSecretPinRequest($ussdSession) {
-        $secretPin = getPin($ussdSession->msisdn); 
-        $pin = $secretPin[0]->pin; 
-        error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from \nParams=" . print_r($secretPin, true), 3, LOG_FILE);
-        $ussdSession->currentFeedbackString = "Enter this Secret pin: ".$pin;
+    } 
+    public function setSecretPinRequest($ussdSession) {    
+        $ussdSession->currentFeedbackString = "Enter secret pin: ";
         $ussdSession->currentFeedbackType = self::SECRET_PIN_REQ;
         return $ussdSession;
         
@@ -247,31 +296,79 @@ class MenuItems {
     }
 
     public function setSearchFacilityNameRequest($ussdSession,$facilityName) {
+        facilityQuerriesLogName($ussdSession,$facilityName);
         $mflCodeRequestsList = searchFacilityName($facilityName);
-        $reply = "Search by Facility Name:";
         if (count($mflCodeRequestsList) > 0) {
+            $reply = "Dear Provider, Here is the facility/s \n we have found in our directory: ";
             for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
-                $reply .= "\n" . "Dear Provider, Here is the facility \n we have found in our directory: "
-                .$mflCodeRequestsList[$i]->facilityName. "\n ( MFL "
-                . $mflCodeRequestsList[$i]->mflCode." )\n, "  . $mflCodeRequestsList[$i]->type_desc." CCC Number: \n". $mflCodeRequestsList[$i]->cccNumber." .MOH";
+                $reply .= "\n" . ": "
+                .$mflCodeRequestsList[$i]->name. "\n ( MFL "
+                . $mflCodeRequestsList[$i]->code." )\n, "  ."";
+            }
+            $reply .= " Check SMS for more details";
+            $send_msg= new _sender();
+            for ($i=0; $i <count($mflCodeRequestsList); $i++) { 
+                $msg="Dear Provider, Here's the facility we have found in our directory:".$mflCodeRequestsList[$i]->name." (MFL ".$mflCodeRequestsList[$i]->code."), ".$mflCodeRequestsList[$i]->ContactDetails.". MOH";
+                $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                $msg,
+                $ussdSession->msisdn, 
+                $_ENV['SHORTCODE'],
+                $_ENV['API-TOKEN']); 
             }
         } else {
-            $reply = "Facility not found.";
+            $reply = " Facility not found.";
         }
         $ussdSession->currentFeedbackString = $reply;
         $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
         return $ussdSession;
     }
+
+
+
+    public function setSearchMFLCodeRequest($ussdSession,$mflCode) {
+        mflQuerriesLogName($ussdSession,$mflCode);
+        $mflCodeRequestsList = searchMfl($mflCode);
+        $reply = "";
+        if (count($mflCodeRequestsList) > 0) {
+            $reply = "Dear Provider, Here is the mfl/s \n we have found in our directory: ";
+            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
+                $reply .= "\n" . ": "
+                .$mflCodeRequestsList[$i]->name. "\n ( MFL "
+                . $mflCodeRequestsList[$i]->code." )\n, "  ."";
+            }
+            $reply .= " Check SMS for more details";
+            $send_msg= new _sender();
+            for ($i=0; $i <count($mflCodeRequestsList); $i++) { 
+                $msg="Dear Provider, Here's the facility we have found in our directory:".$mflCodeRequestsList[$i]->name." (MFL ".$mflCodeRequestsList[$i]->code."), ".$mflCodeRequestsList[$i]->ContactDetails.". MOH";
+                $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                $msg,
+                $ussdSession->msisdn, 
+                $_ENV['SHORTCODE'],
+                $_ENV['API-TOKEN']); 
+            }
+        } else {
+            $reply = "No MFL code was found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+        return $ussdSession;
+    }
+
+
+
     public function setSearchPatientDetailsRequest($ussdSession,$cccNumber) {
         $mflCodeRequestsList = searchPatientDetails($cccNumber);
-      
         $reply = "Search Patient Details: ";
         if (count($mflCodeRequestsList) > 0 ) {
-            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
-                $reply .= "\n" . "Dear Provider, client with UPN \n"
-                .$mflCodeRequestsList[$i]->upn. "\n Treatment details; Regimen: \n"
-                . $mflCodeRequestsList[$i]->currentRegime." and CCC number is\n "  . $mflCodeRequestsList[$i]->cccNumber." \n Clinician number: ".$mflCodeRequestsList[$i]->msisdn;
-            }
+            $send_msg= new _sender();
+            $reply .= "\n" . "Dear Provider, client with UPN ". $mflCodeRequestsList[0]->ccc_no." Treatment details: Regimen: ".$mflCodeRequestsList[0]->regimen."., Next TCA:".$mflCodeRequestsList[0]->tca.", Currently ".$mflCodeRequestsList[0]->viral_load.". MOH";
+
+              $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                $reply,
+                $ussdSession->msisdn, 
+                $_ENV['SHORTCODE'],
+                $_ENV['API-TOKEN']);
+            
         } else {
             $reply = "The CCC Number is Invalid.";
         }
@@ -279,7 +376,6 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::PATIENT_DETAILS_SEARCH_REQUEST;
         return $ussdSession;
     }
-
 
     public function setSearchTransistRequest($ussdSession,$cccNumber) {
         $mflCodeRequestsList = searchPatientDetails($cccNumber);
@@ -300,21 +396,69 @@ class MenuItems {
     }
 
 
-    public function setSearchMFLCodeRequest($ussdSession,$mflCode) {
-        $mflCodeRequestsList = searchMfl($mflCode);
 
-        $reply = "Search by MFL code:";
-        if (count($mflCodeRequestsList) > 0) {
-            for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
-                $reply .= "\n" . date_format(new DateTime($mflCodeRequestsList[$i]->created_date), "d-m-y ") . " MFL Code. " . $mflCodeRequestsList[$i]->mflCode. " Phone. " . $mflCodeRequestsList[$i]->msisdn;
-            }
-        } else {
-            $reply = "No MFL code was found.";
-        }
-        $ussdSession->currentFeedbackString = $reply;
-        $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+
+     public function setUniquePatientIdRequest($ussdSession) {
+        $ussdSession->currentFeedbackString = "Enter Your Unique Patient ID (10 digit):";
+        $ussdSession->currentFeedbackType = self::UNIQUE_PATIENT_ID_NUMBER_REQ;
         return $ussdSession;
     }
+    public function setDirectoryService($ussdSession) {
+        $menuArray = array("Medication Delivery", "Facility Close By");
+        $ussdSession->currentFeedbackString = "ART Directory Services:\n" . generateMenu($menuArray);
+        $ussdSession->currentFeedbackType = self::DIRECTORY_SERVICE_REQ;
+        return $ussdSession;
+    }
+
+    public function setMedicationDelivery($ussdSession) {
+        $menuArray = array("Request Delivery", "Confirm Delivery");
+        $ussdSession->currentFeedbackString = "Get Your Medication Delivered:\n" . generateMenu($menuArray);
+        $ussdSession->currentFeedbackType = self::MEDICATION_DELIVERY_REQ;
+        return $ussdSession;
+    }
+    public function setCountyLocationRequest($ussdSession) {
+        $ussdSession->currentFeedbackString = "Enter Your County (Nairobi):";
+        $ussdSession->currentFeedbackType = self::DELIVERY_COUNTY_LOCATION_REQ;
+        return $ussdSession;
+    }
+
+     public function setDeliveryLocationRequest($ussdSession) {
+        $ussdSession->currentFeedbackString = "Enter Your Location (Jamuhuri Estate):";
+        $ussdSession->currentFeedbackType = self::DELIVERY_LOCATION_REQ;
+        return $ussdSession;
+    }
+
+
+    public function setConfirmMeditationDeliveryRequest($ussdSession) {
+        $clinicTypeList = getOptionType();
+        $reply = "Select one";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
+                }
+            }
+            $userParams = $ussdSession->userParams . UssdSession::CONFIRM_MEDICATION_DELIVERY_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply = "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::CONFIRM_MEDICATION_DELIVERY_REQ;
+        return $ussdSession;
+    } 
+
+
+     public function setRidersCodeRequest($ussdSession) {
+        $ussdSession->currentFeedbackString = "Enter Riders Code (4 Digit):";
+        $ussdSession->currentFeedbackType = self::RIDERS_CODE_REQ;
+        return $ussdSession;
+    }
+
 
     // public function setPatientDetailsRequest($ussdSession,$facilityName) {
     //     $mflCodeRequestsList = searchFacilityName($facilityName);

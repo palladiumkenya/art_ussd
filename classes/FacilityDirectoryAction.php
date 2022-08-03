@@ -2,6 +2,7 @@
 include_once('./QueryManager.php');
 include_once('MenuItems.php');
 include_once('UssdUtils.php');
+include_once('sms_gateway.php');
 class FacilityDirectoryAction {
     public function process($ussdSession) {
         $menuItems = new MenuItems();
@@ -37,11 +38,11 @@ class FacilityDirectoryAction {
          
             } elseif (MenuItems::FACILITY_NAME_REQ == $ussdSession->previousFeedbackType) {
                 $facilityName = trim($params[count($params) - 1]);
-                 if (isValidName($facilityName)) {
+                 if ($facilityName) {
                     $userParams = $ussdSession->userParams . UssdSession::FACILITY_NAME_ID . "=" . $facilityName . "*";
                     $ussdSession->userParams = $userParams;
                     $ussdSession = $menuItems->setSearchFacilityNameRequest($ussdSession,$facilityName);
-                    $reply = "CON" . $ussdSession->currentFeedbackString. $menuSuffix;;
+                    $reply = "END" . $ussdSession->currentFeedbackString;
                     
                 } else {
                     $ussdSession = $menuItems->setFacilityNameRequest($ussdSession);
@@ -63,11 +64,26 @@ class FacilityDirectoryAction {
                 }
 
             } elseif (MenuItems::PHONE_NUMBER_REQ == $ussdSession->previousFeedbackType) {
+
                 $phone = trim($params[count($params) - 1]);
+                $clinic_type = trim($params[count($params) - 2]);
                  if (isValidPhone($phone)) {
                     $userParams = $ussdSession->userParams . UssdSession::PHONE_NUMBER_ID . "=" . $phone . "*";
                     $ussdSession->userParams = $userParams;
-                    $reply = "END " . self::updateFacility($ussdSession);
+                   $location=updateFacility($ussdSession,$phone, $clinic_type);
+                   updateContactLog($ussdSession,$phone, $clinic_type);
+                     $reply = "END Your request was sent successfully. Check SMS. In case of any queries call 0800722440 for free!";
+
+                      $send_msg= new _sender();
+                       $msg =  "Dear Provider, you have updated your ".$location[0]['type_desc']." Clinic Contact number from ".$location[0]['telephone']." to the new mobile number ".$phone." . MOH";
+
+                          $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                          $msg,
+                          $ussdSession->msisdn, 
+                          $_ENV['SHORTCODE'],
+                          $_ENV['API-TOKEN']);
+
+                   
                 } else {
                     $ussdSession = $menuItems->setPhoneNumberRequest($ussdSession);
                         $reply = "CON The Phone Number you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
@@ -75,7 +91,6 @@ class FacilityDirectoryAction {
 
             } elseif (MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType) {
                 $mflCode = trim($params[count($params) - 1]);
-                error_log("[ERROR : " . date("Y-m-d H:i:s") . "] query from safaricom \nParams=" . print_r($mflCode, true), 3, LOG_FILE);
                  if (isValidIdMFLCode($mflCode)) {
                     $userParams = $ussdSession->userParams . UssdSession::MFL_CODE_ID . "=" . $mflCode . "*";
                     $ussdSession->userParams = $userParams;
@@ -87,6 +102,7 @@ class FacilityDirectoryAction {
                         $reply = "CON The code you entered is INVALID characters.\n" . $ussdSession->currentFeedbackString;
                 }   
           
+            
             } else {
                     $reply = "END Connection error. Please try again.";
             }
@@ -105,17 +121,6 @@ class FacilityDirectoryAction {
         }
     }
 
-    function updateFacility($ussdSession){
-        $ussdFacility = new UssdFacility();
-        $ussdFacility->msisdn = $ussdSession->msisdn;
-        $ussdFacility->clinicalType = UssdSession::getUserParam(UssdSession::CLINIC_TYPE_ID, $ussdSession->userParams);
-        $ussdFacility->phoneNumber = UssdSession::getUserParam(UssdSession::PHONE_NUMBER_ID, $ussdSession->userParams);
-        if(updateFacility($ussdFacility)){
-            return "You have updated Facility successfully!";  
-        } else {
-            return "There was an error in your request. Please try again.";           
-        }
-    }
 
     function facilityNameSearch($ussdSession){
         $ussdFacility = new UssdFacility();
