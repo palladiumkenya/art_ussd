@@ -34,10 +34,21 @@ function isValidName($name) {
 }
 
 function isAppointmentDate($apptDate) {
-    if ($apptDate == " ") {
+    //if ($apptDate == " ") {
+        $array_date=str_split($apptDate, 2);
+    	
+    if ( ($apptDate == " ")) 
+    {
         return false;
     } else {
-        return true;
+        if((checkdate($array_date[1],$array_date[0], $array_date[2].$array_date[3])))
+        {
+            return true;
+
+        }else{
+            return false;
+        }
+       
     }
 }
 

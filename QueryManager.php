@@ -299,14 +299,43 @@ function saveAcceptRef($ussdUser, $ccc_no) {
     $reffering_location_details= _select($sql3, $params3);
 
     $sql = "UPDATE tbl_refferal SET acceptor_id, acceptance_date, "
-           . " r_status WHERE ccc_no=:ccc_no AND r_status=0 AND reffered_mfl_code=:mfl_code;";
+           . " r_status WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=1 AND reffered_mfl_code=:mfl_code;";
         $params = array(
         ':acceptor_id' =>  $user_details[0]['user_id'],
         ':acceptance_date' => date('Y-m-d H:i:s'),
         ':ccc_no' =>  $ccc_no,
         ':mfl_code' =>  $user_details[0]['mfl_code'],
         );
-        _select($sql, $params);
+        _execute($sql, $params);
+
+        //Get PatientID
+        $sql4 = "SELECT patient_id FROM tbl_patient WHERE ccc_no=:ccc_no";
+          $params4 = array(
+        ':ccc_no' => $ccc_no
+        );
+
+        $patient_id= _select($sql4, $params4);
+
+        //Insert New Patient Location Details & Close existing Refferal
+
+        $sql6 = "UPDATE tbl_patient_facilities SET to_date=:to_date WHERE patient_id=:patient_id AND to_date IS NULL;";
+     $params6 = array(
+     ':patient_id' =>  $patient_id[0]['patient_id'],
+     ':to_date' => date('Y-m-d H:i:s'),
+     );
+     _execute($sql6, $params6);
+
+        $sql5 = "INSERT INTO tbl_patient_facilities (patient_id, mfl_code, from_date, created_at) VALUE	(:patient_id, :mfl_code, :from_date, :created_at);";
+     $params5 = array(
+        ':patient_id' =>  $patient_id[0]['patient_id'],
+     ':mfl_code' =>  $user_details[0]['mfl_code'],
+     ':from_date' => date('Y-m-d H:i:s'),
+     ':created_at' =>  date('Y-m-d H:i:s'),
+     );
+     _execute($sql5, $params5);
+
+
+
 
         return $reffering_location_details;
        
@@ -445,19 +474,23 @@ function initiate_referal($ussdUser,$ccc_number, $mflCode,$apptDate, $regiment) 
 
       $sql = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,reffered_mfl_code ,appointment_date"
              ." ,current_regimen , initiator_mfl_code) "
-             ." VALUES ( ccc_no, referral_type, initiation_date, initiator_id, reffered_mfl_code,- appointment_date,  current_regimen, initiator_mfl_code
+             ." VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :reffered_mfl_code, :appointment_date,  :current_regimen, :initiator_mfl_code
 )";
 
-
-
+        //$date=date_create("2013-03-15");
+        //echo date_format($date,"Y/m/d H:i:s");
+        //Generate a valid date
+        $array_date=str_split($apptDate, 2);
+       
         $params = array(
             ':ccc_no' => $ccc_number,
             ':referral_type' => 'Normal',
             ':initiation_date' => date("Y-m-d h:i:sa"),
             ':initiator_id' => $user_details[0]['user_id'],
-            ':initiator_mfl_code' => $mflCode,
-            ': appointment_date' => $apptDate,
-            ': current_regimen' => $regiment,
+            ':initiator_mfl_code' => $user_details[0]['mfl_code'],
+            ':reffered_mfl_code' => $mflCode,
+            ':appointment_date' => date('Y-m-d',strtotime($array_date[0].'-'.$array_date[1].'-'.$array_date[2].$array_date[3])),
+            ':current_regimen' => $regiment,
             // ':drug_days' => $number_days,
         );
          _execute($sql, $params);
@@ -477,11 +510,15 @@ function transit($ussdUser,$ccc_number, $number_days) {
     $user_details= _select($sql1, $params2);
 
 
-      $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_patient "
-            ." INNER JOIN  tbl_location ON tbl_patient.mfl_code=tbl_location.mfl_code"
-            ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
-            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
-            ." WHERE tbl_patient.ccc_no=:ccc_no AND tbl_location_details.location_type=1";
+  
+
+            $sql3 = " SELECT   tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM "
+                   ." tbl_patient INNER JOIN tbl_person ON tbl_patient.person_id=tbl_person.person_id "
+	               ." INNER JOIN tbl_patient_facilities ON tbl_patient_facilities.patient_id = tbl_patient.patient_id "
+	                ." INNER JOIN  tbl_location ON tbl_patient_facilities.mfl_code=tbl_location.mfl_code "
+	                ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
+	            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
+	            ." WHERE tbl_patient.patient_id=1 AND tbl_patient.ccc_no = :ccc_no AND tbl_location_details.location_type=1  ORDER BY tbl_patient_facilities.id DESC LIMIT 1; ";
               $params3 = array(
     
         ':ccc_no' => $ccc_number
@@ -524,11 +561,12 @@ function initialReference($ussdUser) {
 function generatePin($ussdUser) {
     $pin = rand(1000,9999);
     //print_r($ussdUser); exit();
-    $sql = "UPDATE tbl_provider SET pin=:pin"
+    $sql = "UPDATE tbl_provider SET pin=:pin, pin_generation_date=:pin_generation_date "
        . " WHERE msisdn=:msisdn";
         $params = array(
         ':msisdn' => $ussdUser,
         ':pin' => $pin,
+        ':pin_generation_date' => date('Y-m-d H:m:s'),
         );
      //  return _select($sql, $params);
         if(_execute($sql, $params))
@@ -620,9 +658,14 @@ function searchFacilityName($facilityName) {
 
 function searchPatientDetails($cccNumber) {
     $mflList = array();
-     $sql = " SELECT  firstname, lastname, date_of_birth, ccc_no,  art_start_date, viral_load, regimen, tca, mfl_code FROM tbl_patient"
-         ." INNER JOIN tbl_person ON tbl_patient.patient_id=tbl_person.person_id "
-         ." WHERE ccc_no=:cccNumber";
+     $sql="SELECT "
+            ." tbl_person.firstname, tbl_person.lastname, tbl_patient.date_of_birth, tbl_patient.ccc_no,  tbl_patient.art_start_date, tbl_patient_observations.viral_load, tbl_patient_observations.regimen, "
+            ." tbl_patient_observations.tca, tbl_patient_facilities.mfl_code FROM "
+            ." tbl_patient INNER JOIN tbl_person ON tbl_patient.person_id=tbl_person.person_id  "      
+            ." INNER JOIN tbl_patient_facilities ON tbl_patient_facilities.patient_id = tbl_patient.patient_id "
+            ." INNER JOIN tbl_patient_observations ON tbl_patient_observations.patient_id = tbl_patient.patient_id "
+            ." WHERE tbl_patient.patient_id=1 ORDER BY tbl_patient_facilities.id DESC, tbl_patient_observations.id DESC "
+            ." LIMIT 1";
     $params = array(
         ':cccNumber' => $cccNumber,
     );

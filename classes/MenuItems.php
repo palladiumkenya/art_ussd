@@ -86,7 +86,7 @@ class MenuItems {
         $ussdSession->userParams = $userParams;
 
         $menuArray = array("Facility Directory", "Referral Services", "Generate Secret pin");
-        $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
+        $ussdSession->currentFeedbackString = "ART Services Select one:\n" . generateMenu($menuArray);
 //        }
         $ussdSession->currentFeedbackType = self::MAINMENU_REQ;
         return $ussdSession;
@@ -107,7 +107,7 @@ class MenuItems {
 
     public function setProvider($ussdSession) {
         $menuArray = array("Facility Directory", "Referral Services", "Generate Secret pin");
-        $ussdSession->currentFeedbackString = "Select one:\n" . generateMenu($menuArray);
+        $ussdSession->currentFeedbackString = "ART Services Select one:\n" . generateMenu($menuArray);
         $ussdSession->currentFeedbackType = self::PROVIDER_ACCESS_REQ;
         return $ussdSession;
     }
@@ -250,7 +250,7 @@ class MenuItems {
     }
 
     public function setFacilityInitMFLCodeRequest($ussdSession) {
-        $ussdSession->currentFeedbackString = "Enter Facility MFL Code:";
+        $ussdSession->currentFeedbackString = "Enter Receiving Facility MFL Code:";
         $ussdSession->currentFeedbackType = self::INIT_MFL_CODE_REQ;
         return $ussdSession;
     }
@@ -290,7 +290,7 @@ class MenuItems {
         
     }
     public function setNumberOfDaysRequest($ussdSession) {
-        $ussdSession->currentFeedbackString = "Enter Number of Days:";
+        $ussdSession->currentFeedbackString = "Enter Dispensed Drugs Number of Days:";
         $ussdSession->currentFeedbackType = self::NUMBER_OF_DAYS_REQ;
         return $ussdSession;
     }
@@ -361,16 +361,18 @@ class MenuItems {
         $reply = "Search Patient Details: ";
         if (count($mflCodeRequestsList) > 0 ) {
             $send_msg= new _sender();
-            $reply .= "\n" . "Dear Provider, client with UPN ". $mflCodeRequestsList[0]->ccc_no." Treatment details: Regimen: ".$mflCodeRequestsList[0]->regimen."., Next TCA:".$mflCodeRequestsList[0]->tca.", Currently ".$mflCodeRequestsList[0]->viral_load.". MOH";
+            $reply .= "\n" . "Client UPN ". $mflCodeRequestsList[0]->ccc_no." Treatment Details Regimen: ".$mflCodeRequestsList[0]->regimen."., Next TCA:".date('d-m-Y',strtotime($mflCodeRequestsList[0]->tca)).", Current VL ".$mflCodeRequestsList[0]->viral_load.".";
+            $msg = "Dear Provider, client with UPN ". $mflCodeRequestsList[0]->ccc_no." Treatment details: Regimen: ".$mflCodeRequestsList[0]->regimen."., Next TCA:".date('d-m-Y',strtotime($mflCodeRequestsList[0]->tca)).", Current VL ".$mflCodeRequestsList[0]->viral_load.". MOH";
+
 
               $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
-                $reply,
+                $msg,
                 $ussdSession->msisdn, 
                 $_ENV['SHORTCODE'],
                 $_ENV['API-TOKEN']);
             
         } else {
-            $reply = "The CCC Number is Invalid.";
+            $reply = "The CCC number provided is Invalid.";
         }
         $ussdSession->currentFeedbackString = $reply;
         $ussdSession->currentFeedbackType = self::PATIENT_DETAILS_SEARCH_REQUEST;

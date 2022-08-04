@@ -167,7 +167,7 @@ class ReferralServicesAction {
                     $reply = "CON INVALID INPUT. Select from 1-" . $clinicalTypeSize . ".\n" . $ussdSession->currentFeedbackString;
                 }
 
-     ///// Third Option
+     ///// Third Option - Search Patient 
             } elseif (MenuItems::PATIENT_DETAILS_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
                 $phone = trim($params[count($params) - 1]);
                  if (isValidIdCCCNumber($phone)) {
@@ -207,18 +207,13 @@ class ReferralServicesAction {
                        $reply = "END Your secret pin is expired.\n Please generate new pin";
                      }     
 
-///Fouth option
+///Fouth option - Transit Client
            } elseif (MenuItems::TRANSIT_CLIENT_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
                 $cccNumber = trim($params[count($params) - 1]);
                 if (isValidIdCCCNumber($cccNumber) && !empty(checkCccNumber($cccNumber)) ){
 
-                   // $demi = checkCccNumber($cccNumber);
-
-
-                   // print_r($demi); exit();
+                    // print_r($demi); exit();
                     $userParams = UssdSession::TRANSIT_CLIENT_CCC_NUMBER_ID . "=" . $cccNumber . "*";
-
-
                     $ussdSession->userParams = $userParams;
                     $ussdSession = $menuItems->setNumberOfDaysRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
@@ -238,7 +233,7 @@ class ReferralServicesAction {
                     $details_facility=transit($ussdSession, $cccNumber, $numberOfDays);
                     $provider_facility=get_provider_location_details($ussdSession, $cccNumber, $numberOfDays);
                     
-                   $reply = "END Your request was sent successfully. Check SMS. In case of any queries call 0800722440 for free!";
+                   $reply = "END Your have succesfully recorded transit details of client with UPN ".$cccNumber.". In case of any queries call 0800722440 for free!";
                           $send_msg= new _sender();
                        $msg =  "Dear Provider, your client with UPN  ".$cccNumber." has received a refill at ".$provider_facility[0]['facility_name']." to last  them ".$numberOfDays."  days. CCC Mobile Number  is ".$provider_facility[0]['telephone']." .MOH";
 
