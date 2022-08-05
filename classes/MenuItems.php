@@ -326,17 +326,20 @@ class MenuItems {
 
 
     public function setSearchMFLCodeRequest($ussdSession,$mflCode) {
-        mflQuerriesLogName($ussdSession,$mflCode);
+        
         $mflCodeRequestsList = searchMfl($mflCode);
+        mflQuerriesLogName($ussdSession,$mflCode);
         $reply = "";
+        //Display to User on USSD
         if (count($mflCodeRequestsList) > 0) {
-            $reply = "Dear Provider, Here is the mfl/s \n we have found in our directory: ";
+            $reply = "Dear Provider, Here is the Facility\n we have found in our directory: ";
             for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
                 $reply .= "\n" . ": "
                 .$mflCodeRequestsList[$i]->name. "\n ( MFL "
                 . $mflCodeRequestsList[$i]->code." )\n, "  ."";
             }
             $reply .= " Check SMS for more details";
+            //Send SMS To User
             $send_msg= new _sender();
             for ($i=0; $i <count($mflCodeRequestsList); $i++) { 
                 $msg="Dear Provider, Here's the facility we have found in our directory:".$mflCodeRequestsList[$i]->name." (MFL ".$mflCodeRequestsList[$i]->code."), ".$mflCodeRequestsList[$i]->ContactDetails.". MOH";
