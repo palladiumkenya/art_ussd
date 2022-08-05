@@ -42,7 +42,7 @@ class FacilityDirectoryAction {
                     $userParams = $ussdSession->userParams . UssdSession::FACILITY_NAME_ID . "=" . $facilityName . "*";
                     $ussdSession->userParams = $userParams;
                     $ussdSession = $menuItems->setSearchFacilityNameRequest($ussdSession,$facilityName);
-                    $reply = "END" . $ussdSession->currentFeedbackString;
+                    $reply = "END " . $ussdSession->currentFeedbackString;
                     
                 } else {
                     $ussdSession = $menuItems->setFacilityNameRequest($ussdSession);
@@ -96,7 +96,7 @@ class FacilityDirectoryAction {
                     $ussdSession->userParams = $userParams;
                    
                     $ussdSession = $menuItems->setSearchMFLCodeRequest($ussdSession,$mflCode);
-                    $reply = "CON" . $ussdSession->currentFeedbackString. $menuSuffix;
+                    $reply = "CON " . $ussdSession->currentFeedbackString. $menuSuffix;
                 } else {
                     $ussdSession = $menuItems->setMFLCodeRequest($ussdSession);
                         $reply = "CON The code you entered is INVALID characters.\n" . $ussdSession->currentFeedbackString;

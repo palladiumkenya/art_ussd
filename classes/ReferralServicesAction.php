@@ -198,7 +198,7 @@ class ReferralServicesAction {
                               if ((isValidPIN($pin)) && ($pin==$ratesList[0]->pin)) {
                                 $userParams = $ussdSession->userParams . UssdSession::SECRET_PIN_ID . "=" . $cccNumber . "*";
                                 $ussdSession = $menuItems->setSearchPatientDetailsRequest($ussdSession,$cccNumber);
-                                $reply = "END" . $ussdSession->currentFeedbackString;          
+                                $reply = "END " . $ussdSession->currentFeedbackString;          
                                } else {
                                     $reply = "CON The Pin you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;
                                } 
