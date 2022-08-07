@@ -248,6 +248,8 @@ function getUssdUserList($msisdn) {
         ':msisdn' => $msisdn,
     );
     $resultset = _select($sql, $params);
+
+    //echo $msisdn; exit();
     foreach ($resultset as $record) {
         $ussdUser = new UssdUser();
         $ussdUser->user_id = $record['user_id'];
@@ -594,7 +596,7 @@ function getDateCreated($msisdn) {
 }
 
 
-function searchMfl($facilityMFL) {
+function searchMfl($facilityName) {
     $mflList = array();
     $sql = "SELECT tbl_master_facility.`name`,tbl_master_facility.`code` , GROUP_CONCAT(' ',tbl_clinictypes.type_desc,': ', "
     ."tbl_location_details.telephone) as ContactDetails"
@@ -603,10 +605,11 @@ function searchMfl($facilityMFL) {
     ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code = tbl_master_facility.`code`"
     ." INNER JOIN tbl_location_details ON tbl_location_details.location_id = tbl_location.location_id"
     ." INNER JOIN tbl_clinictypes ON tbl_clinictypes.type_id=tbl_location_details.location_type"
-     ." WHERE tbl_master_facility.`code` = ':facilityMFL'"
-    ." GROUP BY    tbl_master_facility.`name`,tbl_master_facility.`code`;";
+     ." WHERE tbl_master_facility.`code` = '$facilityName'"
+    ." GROUP BY    tbl_master_facility.`name`,tbl_master_facility.`code`"
+    ." LIMIT 1;";
     $params = array(
-        ':facilityMFL' => $facilityMFL,
+        ':facilityName' => $facilityName,
     );
     $resultset = _select($sql, $params);
     foreach ($resultset as $record) {
