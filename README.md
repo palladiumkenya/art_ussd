@@ -1,4 +1,6 @@
-# art_ussd service
+# art_ussd service 
+
+[![Deploying Art_USSD to test instance](https://github.com/palladiumkenya/art_ussd/actions/workflows/Art_USSD%20Service.yml/badge.svg)](https://github.com/palladiumkenya/art_ussd/actions/workflows/Art_USSD%20Service.yml)
 
 ## prerequisites
 
