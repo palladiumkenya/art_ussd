@@ -1,0 +1,36 @@
+name: Deploying Art_USSD to test instance
+
+on:
+  push:
+    branches:
+      - "master"
+jobs:
+
+  Deploying:
+    name: Deploying by ssh 
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote connection
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username : ${{secrets:USERNAME}}
+          key: ${{secrets.CICD_SECRET}}
+          port: ${{secrets.PORT}}
+          script: |
+            cd /apps/github-workflows/mhealth-apps/
+            sudo rm -rf Art_USSD
+            sudo mkdir Art_USSD
+            sudo chown -R ${{secrets:USERNAME}}:${{secrets.USERNAME}} Art_USSD
+            git config --global --add safe.directory /apps/github-workflows/mhealth-apps/Art_USSD
+            cd Art_USSD
+            git clone -b master https://github.com/palladiumkenya/art_ussd.git
+            git status
+            sudo chmod -R 775 error.log
+            cp /apps/dockerApps/art_ussd/.env /apps/github-workflows/mhealth-apps/Art_USSD
+            docker build -t artussd:latest .
+            docker run --rm -d  -p 8006:8000/tcp --name=artussd artussd:latest 
+
+            echo "build finished ✅"
+
+  
