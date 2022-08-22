@@ -88,7 +88,7 @@ class ReferralServicesAction {
                     $details_facility=initiate_referal($ussdSession, $cccNumber, $mflCode,$apptDate,$regiment);
                    //$provider_facility=initiate_referals_details($ussdSession, $cccNumber, $mflCode,$regiment);
                     
-                    $reply = "END Your request was sent successfully. Check SMS. In case of any queries call 0800722440 for free!";
+                    $reply = "END Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". CCC Clinic Number ".$details_facility[0]['telephone'].". In case of any queries call 0800722440 for free!";
                      $send_msg= new _sender();
                        $msg =  "Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". CCC Clinic Number ".$details_facility[0]['telephone'].". MOH";
 
@@ -96,14 +96,14 @@ class ReferralServicesAction {
                           $msg,
                           $details_facility[0]['telephone'], 
                         $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
 
 
                          $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
                           $ussdSession->msisdn ,
                           $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
 
 
                 
@@ -137,7 +137,7 @@ class ReferralServicesAction {
 
                         //print_r($details_facility);exit();                
                     
-                        $reply = "END Your request was sent successfully. Check SMS. In case of any queries call 0800722440 for free!";
+                        $reply = "END Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". CCC Clinic Number ".$details_facility[0]['telephone'].". In case of any queries call 0800722440 for free!";
                         $send_msg= new _sender();
                         $msg =  "Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". CCC Clinic Number ".$details_facility[0]['telephone'].". MOH";
 
@@ -145,13 +145,13 @@ class ReferralServicesAction {
                           $msg,
                           $details_facility[0]['telephone'], 
                           $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'REF_ACCEPT',$ussdSession);
 
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
                           $ussdSession->msisdn ,
                           $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'REF_ACCEPT',$ussdSession);
 
                     }else{
 
@@ -241,7 +241,7 @@ class ReferralServicesAction {
                           $msg,
                           $details_facility[0]['telephone'], 
                           $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'REF_TRANSIT',$ussdSession);
                 } else {
                     $ussdSession = $menuItems->setNumberOfDaysRequest($ussdSession);
                         $reply = "CON The Number you have entered is INVALID .\n" . $ussdSession->currentFeedbackString;

@@ -20,6 +20,7 @@ class MenuItems {
 	const PHONE_NUMBER_REQ = "PHONE_NUMBER_REQ";
 	const MFL_CODE_REQ = "MFL_CODE_REQ";
     const INIT_MFL_CODE_REQ = "INIT_MFL_CODE_REQ";
+    const MORE_OPTIONS_REQ_DIR = "MORE_OPTIONS_REQ_DIR";
 
 	const FACILITY_NAME_REQ = "FACILITY_NAME_REQ";
 	const INITIATE_REFERRAL_REQ = "INITIATE_REFERRAL_REQ";
@@ -220,6 +221,28 @@ class MenuItems {
         $ussdSession->currentFeedbackType = self::CCC_NUMBER_REQ;
         return $ussdSession;
     }
+    public function setMoreOptionsRequest_dir($ussdSession) {
+        $clinicTypeList = getOptionType();
+        $reply = "Select Options:";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
+                }
+            }
+            $userParams = $ussdSession->userParams . UssdSession::MORE_OPTIONS_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply = "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::MORE_OPTIONS_REQ_DIR;
+        return $ussdSession;
+    } 
     public function setMoreOptionsRequest($ussdSession) {
         $clinicTypeList = getOptionType();
         $reply = "Select Options:";
@@ -313,7 +336,7 @@ class MenuItems {
                 $msg,
                 $ussdSession->msisdn, 
                 $_ENV['SHORTCODE'],
-                $_ENV['API-TOKEN']); 
+                $_ENV['API-TOKEN'], 'DIR_SEARCH',$ussdSession ); 
             }
         } else {
             $reply = " Facility not found.";
@@ -332,28 +355,39 @@ class MenuItems {
         $reply = "";
         //Display to User on USSD
         if (count($mflCodeRequestsList) > 0) {
-            $reply = "Dear Provider, Here is the Facility\n we have found in our directory: ";
+            $reply = "Facility found in the directory: ";
             for ($i = 0; $i < count($mflCodeRequestsList); $i++) {
                 $reply .= "\n" . ": "
-                .$mflCodeRequestsList[$i]->name. "\n ( MFL "
-                . $mflCodeRequestsList[$i]->code." )\n, "  ."";
+                .$mflCodeRequestsList[$i]->name. " (MFL:"
+                . $mflCodeRequestsList[$i]->code." )\n, "
+                .$mflCodeRequestsList[$i]->ContactDetails;
             }
-            $reply .= " Check SMS for more details";
-            //Send SMS To User
-            $send_msg= new _sender();
-            for ($i=0; $i <count($mflCodeRequestsList); $i++) { 
-                $msg="Dear Provider, Here's the facility we have found in our directory:".$mflCodeRequestsList[$i]->name." (MFL ".$mflCodeRequestsList[$i]->code."), ".$mflCodeRequestsList[$i]->ContactDetails.". MOH";
-                $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
-                $msg,
-                $ussdSession->msisdn, 
-                $_ENV['SHORTCODE'],
-                $_ENV['API-TOKEN']); 
+            $reply .= "\n";
+           
+           $clinicTypeList = getOptionType();
+        $reply .= "Send SMS with Details:";
+        if (count($clinicTypeList) > 0) {
+            $displayedClinicTypeList = "";
+            for ($i = 1; $i <= count($clinicTypeList); $i++) {
+                $reply .= "\n" . $i . ":" . $clinicTypeList[$i - 1]->type_desc;
+                if ($i != count($clinicTypeList)) {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id . "#";
+                } else {
+                    $displayedClinicTypeList .= $clinicTypeList[$i - 1]->type_id;
+                }
             }
+            $userParams = $ussdSession->userParams . UssdSession::MORE_OPTIONS_ID . "=" . $displayedClinicTypeList . "*";
+            $ussdSession->userParams = $userParams;
+        } else {
+            $reply .= "\nOption not found.";
+        }
+        $ussdSession->currentFeedbackString = $reply;
+        $ussdSession->currentFeedbackType = self::MORE_OPTIONS_REQ_DIR;
         } else {
             $reply = "No MFL code was found.";
         }
         $ussdSession->currentFeedbackString = $reply;
-        $ussdSession->currentFeedbackType = self::MFL_CODE_REQUEST;
+        $ussdSession->currentFeedbackType = self::MORE_OPTIONS_REQ_DIR;
         return $ussdSession;
     }
 
@@ -372,7 +406,7 @@ class MenuItems {
                 $msg,
                 $ussdSession->msisdn, 
                 $_ENV['SHORTCODE'],
-                $_ENV['API-TOKEN']);
+                $_ENV['API-TOKEN'], 'REF_SEARCH',$ussdSession );
             
         } else {
             $reply = "The CCC number provided is Invalid.";

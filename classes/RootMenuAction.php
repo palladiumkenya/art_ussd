@@ -17,7 +17,7 @@ class RootMenuAction {
             //$registration = new RegistrationAction();
            // $ussdSession = $registration->process($ussdSession);
              $ussdSession = new UssdSession();
-             $reply = "END Your are not Registered to this USSD Platform.";
+             $reply = "END You are not registered for ART USSD Services.";
              $ussdSession->currentFeedbackString = $reply;
         }
         return $ussdSession;

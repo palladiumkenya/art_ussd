@@ -49,7 +49,7 @@ if ($ussdString == "") {
 
         if (MenuItems::AUTHORISATION_REQ == $ussdSession->previousFeedbackType) {
               $ussdSession = new UssdSession();
-              $reply = "END Your are not Registered to this USSD Platform..";
+              $reply = "END You are not registered for ART USSD Services.";
               $ussdSession->currentFeedbackString = $reply;
         // if (MenuItems::FIRSTNAME_REQ == $ussdSession->previousFeedbackType ||
         //         MenuItems::LASTNAME_REQ == $ussdSession->previousFeedbackType ||
@@ -87,6 +87,7 @@ if ($ussdString == "") {
                 MenuItems::CLINIC_TYPE_REQ == $ussdSession->previousFeedbackType ||
                 MenuItems::PHONE_NUMBER_REQ == $ussdSession->previousFeedbackType ||
                 MenuItems::MFL_CODE_REQUEST == $ussdSession->previousFeedbackType ||
+                MenuItems::MORE_OPTIONS_REQ_DIR == $ussdSession->previousFeedbackType ||
 
                 MenuItems::MFL_CODE_REQ == $ussdSession->previousFeedbackType ) {
                 $facilityDirectory = new FacilityDirectoryAction();

@@ -81,7 +81,7 @@ class FacilityDirectoryAction {
                           $msg,
                           $ussdSession->msisdn, 
                           $_ENV['SHORTCODE'],
-                          $_ENV['API-TOKEN']);
+                          $_ENV['API-TOKEN'],'DIR_UPDATE',$ussdSession);
 
                    
                 } else {
@@ -97,12 +97,51 @@ class FacilityDirectoryAction {
                    
                     $ussdSession = $menuItems->setSearchMFLCodeRequest($ussdSession,$mflCode);
                     $reply = "CON " . $ussdSession->currentFeedbackString. $menuSuffix;
+                    //$reply = "CON " . $ussdSession->currentFeedbackString.$menuItems->setMoreOptionsRequest_dir($ussdSession,$mflCode);;
                 } else {
                     $ussdSession = $menuItems->setMFLCodeRequest($ussdSession);
                         $reply = "CON The code you entered is INVALID characters.\n" . $ussdSession->currentFeedbackString;
                 }   
           
-            
+            } elseif (MenuItems::MORE_OPTIONS_REQ_DIR == $ussdSession->previousFeedbackType) {
+
+                $mfl_code = trim($params[count($params) - 2]);
+                $displayedClinicCodesArray = explode("#", UssdSession::getUserParam(UssdSession::MORE_OPTIONS_ID, $ussdSession->userParams));
+                $clinicalTypeSize = count($displayedClinicCodesArray);
+                if (is_numeric($lastSelection) && $lastSelection > 0 && $lastSelection <= $clinicalTypeSize) {
+
+                    if (is_numeric($lastSelection) && $lastSelection == 1) {
+                         
+                        $mflCodeRequestsList=searchMfl($mfl_code); 
+                         //Send SMS To User
+                          $send_msg= new _sender();
+                            for ($i=0; $i <count($mflCodeRequestsList); $i++) { 
+                               $msg="Dear Provider, Here's the facility we have found in our directory:".$mflCodeRequestsList[$i]->name." (MFL ".$mflCodeRequestsList[$i]->code."), ".$mflCodeRequestsList[$i]->ContactDetails.". MOH";
+                                 $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                             $msg,
+                             $ussdSession->msisdn, 
+                             $_ENV['SHORTCODE'],
+                              $_ENV['API-TOKEN'], 'DIR_SEARCH',$ussdSession ); 
+
+                         }           
+                    
+                        $reply = "END Your request was sent successfully. Check SMS. In case of any queries call 0800722440 for free!";
+                      
+
+                    }else{
+
+
+                         $reply = "END Thank you for using ART Directory. In case of any queries call 0800722440 for free.MOH"; 
+
+                         
+
+                         //
+                    }
+                } else {
+                    $ussdSession = $menuItems->setMoreOptionsRequest_dir($ussdSession);
+                    $reply = "CON INVALID INPUT. Select from 1-" . $clinicalTypeSize . ".\n" . $ussdSession->currentFeedbackString;
+                }
+
             } else {
                     $reply = "END Connection error. Please try again.";
             }

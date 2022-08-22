@@ -49,7 +49,7 @@ class GenerateSecretPin {
                 $msg,
                 $ussdSession->msisdn, 
                 $_ENV['SHORTCODE'],
-                $_ENV['API-TOKEN']); 
+                $_ENV['API-TOKEN'],'PIN_GEN',$ussdSession ); 
             
         } else {
             return "END There was an error in your request. Please try again.";           

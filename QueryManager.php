@@ -288,8 +288,17 @@ function saveAcceptRef($ussdUser, $ccc_no) {
               );
     $user_details= _select($sql1, $params2);
 //print_r( $user_details); exit();
- 
-     $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
+
+//Check if Patient Has Been Referral or is a Silent Referral
+$sqlcheck = "SELECT  COUNT(*) as 'exists' FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 LIMIT 1";
+  $paramscheck = array(
+    ':ccc_no' => $ccc_no
+  );
+$patient_exists= _select($sqlcheck, $paramscheck);
+if($patient_exists[0]['exists']==1)
+{
+    //Referral Exist Hence has been initiated
+    $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
           
             ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
             ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
@@ -300,6 +309,7 @@ function saveAcceptRef($ussdUser, $ccc_no) {
     );
     $reffering_location_details= _select($sql3, $params3);
 
+
     $sql = "UPDATE tbl_refferal SET acceptor_id, acceptance_date, "
            . " r_status WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=1 AND reffered_mfl_code=:mfl_code;";
         $params = array(
@@ -309,6 +319,36 @@ function saveAcceptRef($ussdUser, $ccc_no) {
         ':mfl_code' =>  $user_details[0]['mfl_code'],
         );
         _execute($sql, $params);
+
+
+}else
+{
+    // Save Details as Silent Transfer
+
+    $sqlSilent = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,reffered_mfl_code "
+    ." , initiator_mfl_code) "
+    ." VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :reffered_mfl_code,   :initiator_mfl_code
+)";
+
+
+$array_date=str_split($apptDate, 2);
+
+$paramsSilent = array(
+   ':ccc_no' => $ccc_number,
+   ':referral_type' => 'SILENT',
+   ':initiation_date' => date("Y-m-d h:i:sa"),
+   ':initiator_id' => $user_details[0]['user_id'],
+   ':initiator_mfl_code' => '',
+   ':reffered_mfl_code' => $user_details[0]['mfl_code']
+   // ':drug_days' => $number_days,
+);
+_execute($sqlSilent, $paramsSilent);
+
+
+
+}
+ 
+     
 
         //Get PatientID
         $sql4 = "SELECT patient_id FROM tbl_patient WHERE ccc_no=:ccc_no";
@@ -750,5 +790,37 @@ function updateContactLog($ussdUser,$phoneNumber, $clinicType) {
         ':clinic_type'=>$clinicType,
         ':phone_no' => $ussdUser->msisdn,
     );
+    return _execute($sql, $params);
+}
+
+function log_sms_sent($ussdUser, $msg_type,$msg,$msg_status) {
+    
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+    . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+    . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+    . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+      $params2 = array(
+
+':msisdn' => $ussdUser->msisdn
+);
+$user_details= _select($sql1, $params2);
+    //print_r($msg_status); exit();
+    
+    $msg_status = json_decode($msg_status, true);
+    $sql = "INSERT INTO tbl_outgoing (mfl_code, message, destination, message_type, cost, msg_status, message_date, sent_date, at_msg_id ) "
+          . " VALUES(:mfl_code, :message, :destination, :message_type, :cost, :msg_status, :message_date, :sent_date, :at_msg_id)";
+    $params = array(
+        ':mfl_code' => $user_details[0]['mfl_code'],
+         ':message' => $msg,
+        ':destination' =>$msg_status["data"]["SMSMessageData"]["Recipients"][0]["number"],
+        ':message_type'=>$msg_type,
+        ':cost' => $msg_status["data"]["SMSMessageData"]["Recipients"][0]["cost"],
+        ':msg_status' =>$msg_status["data"]["SMSMessageData"]["Recipients"][0]["status"],
+         ':message_date' => date('Y-m-d H:i:s'),
+        ':sent_date' =>date('Y-m-d H:i:s'),
+        ':at_msg_id'=>$msg_status["data"]["SMSMessageData"]["Recipients"][0]["messageId"]
+    );
+
+    
     return _execute($sql, $params);
 }

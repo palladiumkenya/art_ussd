@@ -1,8 +1,8 @@
 <?php
-
+include_once('./QueryManager.php');
 //Central SMS sender class for the USSD ART & Referral Services
 class _sender{
-    public function sendSMS($url_gateway, $message,$destination, $shorcode, $key){
+    public function sendSMS($url_gateway, $message,$destination, $shorcode, $key, $msg_type, $ussdUser){
 
         $url = $url_gateway;
     
@@ -27,18 +27,16 @@ class _sender{
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($fields));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
          
-        curl_exec($curl);
+        $data=curl_exec($curl);
         
          if (curl_errno($curl)) {
             $error_msg = curl_error($curl);
+            $data=''; 
         }
         curl_close($curl);
-
-        // if (isset($error_msg)) {
-        //    return $error_msg;
-        // }
-       
-        //return $data;
+      
+         //Log Message
+         log_sms_sent($ussdUser,$msg_type, $message, $data);
     
     }
 }
