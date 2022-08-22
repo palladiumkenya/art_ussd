@@ -13,10 +13,10 @@ jobs:
       - name: executing remote connection
         uses: appleboy/ssh-action@master
         with:
-          host: ${{secrets.HOST}}
-          username : ${{secrets:USERNAME}}
-          key: ${{secrets.CICD_SECRET}}
-          port: ${{secrets.PORT}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.CICD_SECRET }}
+          port: ${{ secrets.PORT }}
           script: |
             cd /apps/github-workflows/mhealth-apps/
             sudo rm -rf Art_USSD
