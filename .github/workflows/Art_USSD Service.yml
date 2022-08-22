@@ -21,7 +21,7 @@ jobs:
             cd /apps/github-workflows/mhealth-apps/
             sudo rm -rf Art_USSD
             sudo mkdir Art_USSD
-            sudo chown -R ${{secrets:USERNAME}}:${{secrets.USERNAME}} Art_USSD
+            sudo chown -R cicd2:cicd2 Art_USSD
             git config --global --add safe.directory /apps/github-workflows/mhealth-apps/Art_USSD
             cd Art_USSD
             git clone -b master https://github.com/palladiumkenya/art_ussd.git
