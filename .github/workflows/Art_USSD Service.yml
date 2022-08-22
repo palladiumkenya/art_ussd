@@ -26,7 +26,7 @@ jobs:
             cd Art_USSD
             git clone -b master https://github.com/palladiumkenya/art_ussd.git .
             git status
-            sudo chmod -R 775 error.log
+            sudo chmod  775 error.log
             cp /apps/dockerApps/art_ussd/.env /apps/github-workflows/mhealth-apps/Art_USSD
             docker build -t artussd:latest .
             docker run --rm -d  -p 8006:8000/tcp --name=artussd artussd:latest 
