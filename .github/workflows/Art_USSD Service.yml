@@ -24,7 +24,7 @@ jobs:
             sudo chown -R cicd2:cicd2 Art_USSD
             git config --global --add safe.directory /apps/github-workflows/mhealth-apps/Art_USSD
             cd Art_USSD
-            git clone -b master https://github.com/palladiumkenya/art_ussd.git
+            git clone -b master https://github.com/palladiumkenya/art_ussd.git .
             git status
             sudo chmod -R 775 error.log
             cp /apps/dockerApps/art_ussd/.env /apps/github-workflows/mhealth-apps/Art_USSD
