@@ -286,32 +286,30 @@ function saveAcceptRef($ussdUser, $ccc_no) {
               $params2 = array(
                 ':msisdn' => $ussdUser->msisdn
               );
-    $user_details= _select($sql1, $params2);
-//print_r( $user_details); exit();
+
+$user_details= _select($sql1, $params2);
 
 //Check if Patient Has Been Referral or is a Silent Referral
-$sqlcheck = "SELECT  COUNT(*) as 'exists' FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 LIMIT 1";
+$sqlcheck = "SELECT  COUNT(*) as 'exists' FROM tbl_refferal WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=0";
   $paramscheck = array(
     ':ccc_no' => $ccc_no
   );
 $patient_exists= _select($sqlcheck, $paramscheck);
-if($patient_exists[0]['exists']==1)
+if($patient_exists[0]['exists']>0)
 {
     //Referral Exist Hence has been initiated
-    $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "
-          
+    $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "  
             ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
             ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
             ." WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 LIMIT 1) AND tbl_location_details.location_type=1";
-              $params3 = array(
-    
-        ':ccc_no' => $ccc_no
-    );
+            $params3 = array(
+        ':ccc_no' => $ccc_no 
+     );
     $reffering_location_details= _select($sql3, $params3);
 
 
-    $sql = "UPDATE tbl_refferal SET acceptor_id, acceptance_date, "
-           . " r_status WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=1 AND reffered_mfl_code=:mfl_code;";
+    $sql = "UPDATE tbl_refferal SET acceptor_id=:acceptor_id, acceptance_date=:acceptance_date, "
+           . " r_status=1 WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=0 AND reffered_mfl_code=:mfl_code;";
         $params = array(
         ':acceptor_id' =>  $user_details[0]['user_id'],
         ':acceptance_date' => date('Y-m-d H:i:s'),
@@ -326,20 +324,23 @@ if($patient_exists[0]['exists']==1)
     // Save Details as Silent Transfer
 
     $sqlSilent = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,reffered_mfl_code "
-    ." , initiator_mfl_code) "
-    ." VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :reffered_mfl_code,   :initiator_mfl_code
+    ." , initiator_mfl_code, acceptance_date, acceptor_id, r_status) "
+    ." VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :reffered_mfl_code,   :initiator_mfl_code, :acceptance_date, :acceptor_id, :r_status
 )";
 
 
 $array_date=str_split($apptDate, 2);
 
 $paramsSilent = array(
-   ':ccc_no' => $ccc_number,
-   ':referral_type' => 'SILENT',
+   ':ccc_no' => $ccc_no,
+   ':referral_type' => 'Silent',
    ':initiation_date' => date("Y-m-d h:i:sa"),
    ':initiator_id' => $user_details[0]['user_id'],
    ':initiator_mfl_code' => '',
-   ':reffered_mfl_code' => $user_details[0]['mfl_code']
+   ':reffered_mfl_code' => $user_details[0]['mfl_code'],
+   ':acceptance_date'=>date("Y-m-d h:i:sa"),
+   ':acceptor_id'=>$user_details[0]['user_id'],
+   ':r_status'=>'1'
    // ':drug_days' => $number_days,
 );
 _execute($sqlSilent, $paramsSilent);
@@ -560,15 +561,15 @@ function transit($ussdUser,$ccc_number, $number_days) {
 	                ." INNER JOIN  tbl_location ON tbl_patient_facilities.mfl_code=tbl_location.mfl_code "
 	                ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
 	            ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
-	            ." WHERE tbl_patient.patient_id=1 AND tbl_patient.ccc_no = :ccc_no AND tbl_location_details.location_type=1  ORDER BY tbl_patient_facilities.id DESC LIMIT 1; ";
+	            ." WHERE  tbl_patient.ccc_no = :ccc_no AND tbl_location_details.location_type=1  ORDER BY tbl_patient_facilities.id DESC LIMIT 1; ";
               $params3 = array(
     
         ':ccc_no' => $ccc_number
     );
     $patient_location_details= _select($sql3, $params3);
 
-      $sql = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,initiator_mfl_code, drug_days
-) VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :initiator_mfl_code,  :drug_days
+      $sql = "INSERT INTO tbl_refferal ( ccc_no ,referral_type ,initiation_date ,initiator_id ,initiator_mfl_code, drug_days, r_status
+) VALUES ( :ccc_no, :referral_type, :initiation_date, :initiator_id, :initiator_mfl_code,  :drug_days, :r_status
 )";
         $params = array(
             ':ccc_no' => $ccc_number,
@@ -577,6 +578,7 @@ function transit($ussdUser,$ccc_number, $number_days) {
              ':initiator_id' => $user_details[0]['user_id'],
               ':initiator_mfl_code' => $user_details[0]['mfl_code'],
                ':drug_days' => $number_days,
+               ':r_status' => '1'
         );
          _execute($sql, $params);
 
@@ -677,7 +679,7 @@ function searchFacilityName($facilityName) {
     ." INNER JOIN tbl_clinictypes ON tbl_clinictypes.type_id=tbl_location_details.location_type"
      ." WHERE tbl_master_facility.`name` LIKE '%$facilityName%'"
     ." GROUP BY    tbl_master_facility.`name`,tbl_master_facility.`code`"
-    ." LIMIT 5;";
+    ." LIMIT 3;";
     $params = array(
         ':name' => $facilityName,
     );
