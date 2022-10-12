@@ -86,21 +86,24 @@ class ReferralServicesAction {
                 
 
                     $details_facility=initiate_referal($ussdSession, $cccNumber, $mflCode,$apptDate,$regiment);
+                    //print_r($details_facility); exit();
+                   // echo $details_facility[1][0]['facility_name']; exit();
                    //$provider_facility=initiate_referals_details($ussdSession, $cccNumber, $mflCode,$regiment);
                     
-                    $reply = "END Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". PhoneNumber ".$details_facility[0]['telephone'].". In case of any queries call 0800722440 for free!";
+                    $reply = "END Client with UPN ".$cccNumber. " has succesfully been reffered to  ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". In case of any queries call 0800722440 for free!";
                      $send_msg= new _sender();
-                       $msg =  "Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". PhoneNumber ".$details_facility[0]['telephone'].". MOH";
+                       $msg =  "Client with UPN ".$cccNumber. " has succesfully been reffered from  ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
 
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
-                          $details_facility[0]['telephone'], 
+                          $details_facility[0][0]['telephone'], 
                         $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
 
+                          $msg_initiator =  "Client with UPN ".$cccNumber. " has been succesfully reffered to  ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". MOH";
 
                          $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
-                          $msg,
+                          $msg_initiator,
                           $ussdSession->msisdn ,
                           $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
@@ -137,18 +140,21 @@ class ReferralServicesAction {
 
                         //print_r($details_facility);exit();                
                     
-                        $reply = "END Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". PhoneNumber ".$details_facility[0]['telephone'].". In case of any queries call 0800722440 for free!";
+                        $reply = "END Client with UPN ".$cccNumber. " has been succesfully reffered from ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". In case of any queries call 0800722440 for free!";
                         $send_msg= new _sender();
-                        $msg =  "Client with UPN ".$cccNumber. " was succesfully reffered to  ".$details_facility[0]['facility_name'].". PhoneNumber ".$details_facility[0]['telephone'].". MOH";
+                        $msg =  "Client with UPN ".$cccNumber. " has been succesfully accepted at ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
 
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
-                          $details_facility[0]['telephone'], 
+                          $details_facility[1][0]['telephone'], 
                           $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_ACCEPT',$ussdSession);
 
+                          $msg_accept =  "Client with UPN ".$cccNumber. " has been succesfully accepted at ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
+
+
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
-                          $msg,
+                          $msg_accept,
                           $ussdSession->msisdn ,
                           $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_ACCEPT',$ussdSession);
