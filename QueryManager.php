@@ -535,7 +535,36 @@ function get_provider_location_details($ussdUser,$ccc_number, $number_days) {
          return $provider_location_details;
 }
 
+function checkCccNumber_exists($ccc_no, $ussdUser) {
+    $ussdUserList = array();
+    $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
+            . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
+            . " INNER JOIN tbl_provider ON tbl_provider.person_id=tbl_person.person_id "
+            . " WHERE tbl_provider.msisdn=:msisdn LIMIT 1";
+              $params2 = array(
+                ':msisdn' => $ussdUser->msisdn
+              );
+    $user_details= _select($sql1, $params2);
 
+
+    $sql = " SELECT  tbl_patient.*  FROM "
+    ." tbl_patient INNER JOIN tbl_person ON tbl_patient.person_id=tbl_person.person_id "
+    ." INNER JOIN tbl_patient_facilities ON tbl_patient_facilities.patient_id = tbl_patient.patient_id "
+    ." INNER JOIN (	SELECT MAX(tbl_patient_facilities.id) as id, tbl_patient_facilities.patient_id  FROM tbl_patient_facilities GROUP BY  tbl_patient_facilities.patient_id) tbl2 ON tbl2.id =tbl_patient_facilities.id"
+    ." WHERE  tbl_patient.ccc_no = :ccc_no AND tbl_patient.is_active=1 AND tbl_patient_facilities.mfl_code=:mfl_code  ORDER BY tbl_patient_facilities.id DESC LIMIT 1; ";
+    $params = array(
+        ':ccc_no' => $ccc_no,
+        ':mfl_code' => $user_details[0]['mfl_code'],
+    );
+    $resultset = _select($sql, $params);
+    
+    foreach ($resultset as $record) {
+        $ussdUser = new UssdFacility();
+        $ussdUser->ccc_no = $record['ccc_no'];
+        $ussdUserList[] = $ussdUser;
+    }
+    return $ussdUserList;
+}
 
 function checkCccNumber($ccc_no) {
     $ussdUserList = array();

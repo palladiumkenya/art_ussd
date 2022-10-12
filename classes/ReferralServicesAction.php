@@ -41,14 +41,14 @@ class ReferralServicesAction {
          
            } elseif (MenuItems::INITIAL_REF_CCC_NUMBER_REQ == $ussdSession->previousFeedbackType) {
                 $cccNumber = trim($params[count($params) - 1]);
-                if (isValidIdCCCNumber($cccNumber) && !empty(checkCccNumber($cccNumber)) ){
+                if (isValidIdCCCNumber($cccNumber) && !empty(checkCccNumber_exists($cccNumber,$ussdSession)) ){
                     $userParams = UssdSession::INITIAL_REF_CCC_NUMBER_ID . "=" . $cccNumber . "*";
                     $ussdSession->userParams = $userParams;
                     $ussdSession = $menuItems->setFacilityInitMFLCodeRequest($ussdSession);
                     $reply = "CON " . $ussdSession->currentFeedbackString;
                 } else {
                     $ussdSession = $menuItems->setInitialReferralRequest($ussdSession);
-                        $reply = "CON The CCC Number is INVALID .\n" . $ussdSession->currentFeedbackString;
+                        $reply = "CON The CCC Number is INVALID or Does not exist in your facility .\n" . $ussdSession->currentFeedbackString;
                 }
             } elseif (MenuItems::INIT_MFL_CODE_REQ == $ussdSession->previousFeedbackType) {
                 $mflCode = trim($params[count($params) - 1]);
