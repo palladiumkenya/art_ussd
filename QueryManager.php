@@ -277,7 +277,7 @@ function createUssdUser($ussdUser) {
 
 
 
-function saveAcceptRef($ussdUser, $ccc_no) {
+function saveAcceptRef($ussdUser, $ccc_no, $status) {
 
      $sql1 = "SELECT  tbl_user.user_id, tbl_provider.mfl_code FROM tbl_user "
             . " INNER JOIN tbl_person ON tbl_user.person_id=tbl_person.person_id "
@@ -320,9 +320,17 @@ if($patient_exists[0]['exists']>0)
 );
     $accepting_details= _select($sql9, $params9);
 
+    if($status==1) //Accepted Referral
+    {
+        $sql = "UPDATE tbl_refferal SET acceptor_id=:acceptor_id, acceptance_date=:acceptance_date, "
+        . " r_status=1 WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=0 AND reffered_mfl_code=:mfl_code;";
+    }else{ //Declined Referral
+        $sql = "UPDATE tbl_refferal SET acceptor_id=:acceptor_id, acceptance_date=:acceptance_date, "
+        . " r_status=5 WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=0 AND reffered_mfl_code=:mfl_code;";
 
-    $sql = "UPDATE tbl_refferal SET acceptor_id=:acceptor_id, acceptance_date=:acceptance_date, "
-           . " r_status=1 WHERE ccc_no=:ccc_no AND referral_type='Normal' AND r_status=0 AND reffered_mfl_code=:mfl_code;";
+    }
+
+
         $params = array(
         ':acceptor_id' =>  $user_details[0]['user_id'],
         ':acceptance_date' => date('Y-m-d H:i:s'),
@@ -376,20 +384,41 @@ $reffering_location_details= _select($sql3, $params3);
 )";
 
 
-$array_date=str_split($apptDate, 2);
 
-$paramsSilent = array(
-   ':ccc_no' => $ccc_no,
-   ':referral_type' => 'Silent',
-   ':initiation_date' => date("Y-m-d h:i:sa"),
-   ':initiator_id' => $user_details[0]['user_id'],
-   ':initiator_mfl_code' => '',
-   ':reffered_mfl_code' => $user_details[0]['mfl_code'],
-   ':acceptance_date'=>date("Y-m-d h:i:sa"),
-   ':acceptor_id'=>$user_details[0]['user_id'],
-   ':r_status'=>'1'
-   // ':drug_days' => $number_days,
-);
+if($status==1) //Accepted Referral
+    {
+
+            $paramsSilent = array(
+            ':ccc_no' => $ccc_no,
+            ':referral_type' => 'Silent',
+            ':initiation_date' => date("Y-m-d h:i:sa"),
+            ':initiator_id' => $user_details[0]['user_id'],
+            ':initiator_mfl_code' => '',
+            ':reffered_mfl_code' => $user_details[0]['mfl_code'],
+            ':acceptance_date'=>date("Y-m-d h:i:sa"),
+            ':acceptor_id'=>$user_details[0]['user_id'],
+            ':r_status'=>'1'
+            // ':drug_days' => $number_days,
+            );
+    }else
+    {
+
+        $paramsSilent = array(
+            ':ccc_no' => $ccc_no,
+            ':referral_type' => 'Silent',
+            ':initiation_date' => date("Y-m-d h:i:sa"),
+            ':initiator_id' => $user_details[0]['user_id'],
+            ':initiator_mfl_code' => '',
+            ':reffered_mfl_code' => $user_details[0]['mfl_code'],
+            ':acceptance_date'=>date("Y-m-d h:i:sa"),
+            ':acceptor_id'=>$user_details[0]['user_id'],
+            ':r_status'=>'5'
+            // ':drug_days' => $number_days,
+         );
+
+    }
+
+
 _execute($sqlSilent, $paramsSilent);
 
 
@@ -397,7 +426,8 @@ _execute($sqlSilent, $paramsSilent);
 }
  
      
-
+    if($status==1) //Accepted Referral
+    {
         //Get PatientID
         $sql4 = "SELECT patient_id FROM tbl_patient WHERE ccc_no=:ccc_no";
           $params4 = array(
@@ -424,7 +454,7 @@ _execute($sqlSilent, $paramsSilent);
      );
      _execute($sql5, $params5);
 
-
+    }
 
 
         return array($accepting_details, $reffering_location_details);
@@ -469,7 +499,7 @@ function initiate_referals_details($ussdUser,$ccc_number, $number_days) {
     );
     $provider_location_details= _select($sql3, $params3);
 
-   // print_r($provider_location_details); exit();
+   
 
      
 
