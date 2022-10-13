@@ -301,7 +301,7 @@ if($patient_exists[0]['exists']>0)
     $sql3 = "SELECT tbl_location_details.telephone, tbl_master_facility.`name` as facility_name FROM tbl_location "  
             ." INNER JOIN tbl_master_facility ON tbl_location.mfl_code=tbl_master_facility.`code` "
             ." INNER JOIN tbl_location_details ON tbl_location_details.location_id=tbl_location.location_id "
-            ." WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 LIMIT 1) AND tbl_location_details.location_type=1";
+            ." WHERE tbl_location.mfl_code=(SELECT  initiator_mfl_code FROM tbl_refferal WHERE ccc_no=:ccc_no AND r_status=0 ORDER BY tbl_refferal.refferal_id DESC LIMIT 1) AND tbl_location_details.location_type=1";
             $params3 = array(
         ':ccc_no' => $ccc_no 
      );

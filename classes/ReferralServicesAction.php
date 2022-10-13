@@ -96,7 +96,7 @@ class ReferralServicesAction {
 
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
-                          $details_facility[0][0]['telephone'], 
+                          $details_facility[1][0]['telephone'], 
                         $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
 
