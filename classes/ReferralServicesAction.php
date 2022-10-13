@@ -89,18 +89,21 @@ class ReferralServicesAction {
                     //print_r($details_facility); exit();
                    // echo $details_facility[1][0]['facility_name']; exit();
                    //$provider_facility=initiate_referals_details($ussdSession, $cccNumber, $mflCode,$regiment);
-                    
-                    $reply = "END Client with UPN ".$cccNumber. " has succesfully been reffered to ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". In case of any queries call 0800722440 for free!";
-                     $send_msg= new _sender();
-                       $msg =  "Client with UPN ".$cccNumber. " has succesfully been reffered from ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
 
-                          $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
-                          $msg,
+                   $array_date=str_split($apptDate, 2);
+                   $tca_date=date('d-m-Y',strtotime($array_date[0].'-'.$array_date[1].'-'.$array_date[2].$array_date[3]));
+                    
+                       $reply = "END Client with UPN ".$cccNumber." has succesfully been reffered to ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". In case of any queries call 0800722440 for free!";
+                       $send_msg= new _sender();
+                       $msg =  "Client with UPN ".$cccNumber." has succesfully been reffered from ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". Expected Arrival Date ".$tca_date.". MOH";
+
+                       $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
+                       $msg,
                           $details_facility[1][0]['telephone'], 
                         $_ENV['SHORTCODE'],
                           $_ENV['API-TOKEN'],'REF_INITIATE',$ussdSession );
 
-                          $msg_initiator =  "Client with UPN ".$cccNumber. " has been succesfully reffered to ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". MOH";
+                          $msg_initiator =  "Client with UPN ".$cccNumber. " has been succesfully reffered to ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". Expected Arrival Date ".$tca_date.". MOH";
 
                          $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg_initiator,
@@ -142,7 +145,7 @@ class ReferralServicesAction {
                     
                         $reply = "END Client with UPN ".$cccNumber. " has been succesfully reffered from ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". In case of any queries call 0800722440 for free!";
                         $send_msg= new _sender();
-                        $msg =  "Client with UPN ".$cccNumber. " has been succesfully accepted at ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
+                        $msg =  "Client with UPN ".$cccNumber." has been succesfully accepted at ".$details_facility[0][0]['facility_name'].". PhoneNumber ".$details_facility[0][0]['telephone'].". MOH";
 
                           $resurn_msg=$send_msg->sendSMS($_ENV['SENDER_URL'],
                           $msg,
