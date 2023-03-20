@@ -75,14 +75,27 @@ class ReferralServicesAction {
                 }
 
            } elseif (MenuItems::CURRENT_REGIMEN_REQ == $ussdSession->previousFeedbackType) {
-                $cccNumber = trim($params[count($params) - 4]);
-                $mflCode = trim($params[count($params) - 3]);
-                $apptDate = trim($params[count($params) - 2]);
-                $regiment = trim($params[count($params) - 1]);
+                //$cccNumber = trim($params[count($params) - 4]);
+               // $mflCode = trim($params[count($params) - 3]);
+               // $apptDate = trim($params[count($params) - 2]);
+               $regiment = trim($params[count($params) - 1]);
+
+               //'INITIAL_REF_CCC_NUMBER_ID=1234567890*INIT_MFL_CODE_ID=12438*APPOINTMENT_DATE_ID=12042023*CURRENT_REGIMEN_ID=1#2#3#4#5#6#7#8#9#10#11#12#13#14#15*CURRENT_REGIMEN_ID=1#2#3#4#5#6#7#8#9#10#11#12#13#14#15*CURRENT_REGIMEN_ID=1*';
+
+               
                 
                  if (is_numeric($regiment)) {
                     $userParams = $ussdSession->userParams . UssdSession::CURRENT_REGIMEN_ID . "=" . $regiment . "*";
                     $ussdSession->userParams = $userParams;
+
+                    $selected_options=explode("*",$ussdSession->userParams);
+
+                    $cccNumber = trim(substr($selected_options[0],strlen('INITIAL_REF_CCC_NUMBER_ID=')));
+                    $mflCode = trim(substr($selected_options[1],strlen('INIT_MFL_CODE_ID=')));
+                    $apptDate = trim(substr($selected_options[2],strlen('APPOINTMENT_DATE_ID=')));
+                   // $regiment = trim($params[count($params) - 1]);
+
+                    //print_r($ussdSession->userParams); //exit();
                 
 
                     $details_facility=initiate_referal($ussdSession, $cccNumber, $mflCode,$apptDate,$regiment);
@@ -90,7 +103,7 @@ class ReferralServicesAction {
                    // echo $details_facility[1][0]['facility_name']; exit();
                    //$provider_facility=initiate_referals_details($ussdSession, $cccNumber, $mflCode,$regiment);
 
-                   $array_date=str_split($apptDate, 2);
+                   $array_date=str_split(str_replace('-','',str_replace('/','',$apptDate)), 2);
                    $tca_date=date('d-m-Y',strtotime($array_date[0].'-'.$array_date[1].'-'.$array_date[2].$array_date[3]));
                     
                        $reply = "END Client with UPN ".$cccNumber." has succesfully been reffered to ".$details_facility[1][0]['facility_name'].". PhoneNumber ".$details_facility[1][0]['telephone'].". In case of any queries call 0800722440 for free!";

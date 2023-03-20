@@ -35,9 +35,9 @@ function isValidName($name) {
 
 function isAppointmentDate($apptDate) {
     //if ($apptDate == " ") {
-        $array_date=str_split($apptDate, 2);
+        $array_date=str_split(str_replace('-','',str_replace('/','',$apptDate)), 2);
     	
-    if ( ($apptDate == " ")) 
+    if ( ($apptDate == " ") || (strlen(str_replace('-','',str_replace('/','',$apptDate)))!=8)) 
     {
         return false;
     } else {

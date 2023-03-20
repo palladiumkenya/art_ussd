@@ -640,7 +640,7 @@ function initiate_referal($ussdUser,$ccc_number, $mflCode,$apptDate, $regiment) 
         //$date=date_create("2013-03-15");
         //echo date_format($date,"Y/m/d H:i:s");
         //Generate a valid date
-        $array_date=str_split($apptDate, 2);
+        $array_date=str_split(str_replace('-','',str_replace('/','',$apptDate)), 2);
        
         $params = array(
             ':ccc_no' => $ccc_number,
